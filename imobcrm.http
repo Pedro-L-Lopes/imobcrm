@@ -1,0 +1,6 @@
+@imobcrm_HostAddress = http://localhost:5278
+
+GET {{imobcrm_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
