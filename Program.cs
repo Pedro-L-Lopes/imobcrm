@@ -1,4 +1,5 @@
 using imobcrm.Context;
+using imobcrm.DTOs.Mappings;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
@@ -17,7 +18,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
                     options.UseMySql(mySqlConnection,
                     ServerVersion.AutoDetect(mySqlConnection)));
 
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddAutoMapper(typeof(Program));
     
 // Habit service and repository
 //builder.Services.AddScoped<IClienteRepository, ClienteRepository>();

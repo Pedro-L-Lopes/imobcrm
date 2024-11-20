@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-
-namespace imobcrm.Models;
+﻿namespace imobcrm.Models;
 public class ContratoAluguel
 {
     public Guid ContratoId { get; set; } = Guid.NewGuid();

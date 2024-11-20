@@ -20,5 +20,5 @@ public class Cliente
     public DateTime DataCriacao { get; set; } = DateTime.UtcNow;
 
     // Propriedade de Navegação - um cliente pode ter vários imóveis
-    //public ICollection<Imovel> Imoveis { get; set; }
+    public ICollection<Imovel> Imoveis { get; set; }
 }

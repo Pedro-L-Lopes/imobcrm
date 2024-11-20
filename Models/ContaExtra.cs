@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿
+using System.ComponentModel.DataAnnotations;
 
 namespace imobcrm.Models;
 public class ContaExtra
@@ -20,5 +20,5 @@ public class ContaExtra
 
     public DateTime? DataPagamento { get; set; }
 
-    public ContratoAluguel Contrato { get; set; }
+    public ContratoAluguel ContratoAluguel { get; set; }
 }
