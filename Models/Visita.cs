@@ -1,7 +1,7 @@
 ﻿namespace imobcrm.Models;
 public class Visita
 {
-    public Guid VisitaId { get; set; } = Guid.NewGuid();
+    public Guid VisitaId { get; set; }
 
     public DateTime DataHora { get; set; }
 

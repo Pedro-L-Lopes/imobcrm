@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using imobcrm.DTOs.Locations;
 using imobcrm.Models;
 
 namespace imobcrm.DTOs.Mappings;
@@ -10,7 +11,6 @@ public class MappingProfile : Profile
         CreateMap<ContaExtra, ContaExtraDTO>().ReverseMap();
         CreateMap<ContratoAluguel, ContratoAluguelDTO>().ReverseMap();
         CreateMap<Imovel, ImovelDTO>().ReverseMap();
-        CreateMap<Localizacao, LocalizacaoDTO>().ReverseMap();
         CreateMap<PagamentoAluguel, PagamentoAluguelDTO>().ReverseMap();
         CreateMap<Visita, VisitaDTO>().ReverseMap();
     }

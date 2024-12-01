@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using imobcrm.Context;
 
@@ -11,9 +12,11 @@ using imobcrm.Context;
 namespace imobcrm.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241130183416_UpdateColumnTypes")]
+    partial class UpdateColumnTypes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -165,12 +168,14 @@ namespace imobcrm.Migrations
                     b.Property<float?>("Area")
                         .HasColumnType("float");
 
+                    b.Property<int>("BairroCepId")
+                        .HasColumnType("int");
+
                     b.Property<byte?>("Banheiros")
                         .HasColumnType("tinyint unsigned");
 
-                    b.Property<string>("Cep")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("CidadeUFId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("DataAutorizacao")
                         .HasColumnType("datetime(6)");
@@ -185,9 +190,6 @@ namespace imobcrm.Migrations
 
                     b.Property<byte?>("Garagem")
                         .HasColumnType("tinyint unsigned");
-
-                    b.Property<int>("LocalizacaoId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Numero")
                         .IsRequired()
@@ -241,36 +243,13 @@ namespace imobcrm.Migrations
 
                     b.HasKey("ImovelId");
 
-                    b.HasIndex("LocalizacaoId");
+                    b.HasIndex("BairroCepId");
+
+                    b.HasIndex("CidadeUFId");
 
                     b.HasIndex("ProprietarioId");
 
                     b.ToTable("Imoveis");
-                });
-
-            modelBuilder.Entity("imobcrm.Models.Localizacao", b =>
-                {
-                    b.Property<int>("LocalizacaoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("LocalizacaoId"));
-
-                    b.Property<string>("Bairro")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Cidade")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Estado")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("LocalizacaoId");
-
-                    b.ToTable("Localizacoes");
                 });
 
             modelBuilder.Entity("imobcrm.Models.Locations.BairroCEP", b =>
@@ -425,9 +404,15 @@ namespace imobcrm.Migrations
 
             modelBuilder.Entity("imobcrm.Models.Imovel", b =>
                 {
-                    b.HasOne("imobcrm.Models.Localizacao", "Localizacao")
+                    b.HasOne("imobcrm.Models.Locations.BairroCEP", "BairroCEP")
                         .WithMany()
-                        .HasForeignKey("LocalizacaoId")
+                        .HasForeignKey("BairroCepId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("imobcrm.Models.Locations.CidadeUF", "CidadeUF")
+                        .WithMany()
+                        .HasForeignKey("CidadeUFId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -437,7 +422,9 @@ namespace imobcrm.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Localizacao");
+                    b.Navigation("BairroCEP");
+
+                    b.Navigation("CidadeUF");
 
                     b.Navigation("Proprietario");
                 });

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace imobcrm.Models;
 public class PagamentoAluguel
 {
-    public Guid PagamentoAluguelId { get; set; } = Guid.NewGuid();
+    public Guid PagamentoAluguelId { get; set; }
 
     public Guid ContratoId { get; set; } // Chave estrangeira para ContratoAluguel
 

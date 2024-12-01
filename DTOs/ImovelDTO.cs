@@ -1,22 +1,17 @@
-﻿namespace imobcrm.DTOs;
+﻿using imobcrm.Models;
+
+namespace imobcrm.DTOs;
 public class ImovelDTO
 {
     public Guid ProprietarioId { get; set; } // Relacionamento com Cliente
 
     public string Finalidade { get; set; }
-
     public string TipoImovel { get; set; }
-
     public decimal Valor { get; set; }
-
     public int SiteCod { get; set; }
-
     public decimal? ValorCondominio { get; set; }
-
     public float? Area { get; set; }
-
     public string Observacoes { get; set; }
-
     public string Descricao { get; set; }
 
     public byte? Quartos { get; set; }
@@ -28,14 +23,13 @@ public class ImovelDTO
     public byte? Garagem { get; set; }
 
     public decimal? ValorAutorizacao { get; set; }
-
     public string TipoAutorizacao { get; set; }
-
     public DateTime? DataAutorizacao { get; set; }
 
-    public Guid EnderecoId { get; set; } // Relacionamento com Localizacoes
-
     public string Rua { get; set; }
-
     public string Numero { get; set; }
+    public string Cep { get; set; }
+
+    public int LocalizacaoId { get; set; }
+
 }

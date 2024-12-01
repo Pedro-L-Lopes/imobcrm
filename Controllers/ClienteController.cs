@@ -1,44 +1,46 @@
-﻿using imobcrm.Context;
-using imobcrm.Models;
+﻿using imobcrm.DTOs;
+using imobcrm.Pagination;
+using imobcrm.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace imobcrm.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("/[controller]")]
     [ApiController]
     public class ClienteController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IClienteService _clienteService;
 
-        public ClienteController(AppDbContext context)
+        public ClienteController(IClienteService clienteService)
         {
-            _context = context;
+            _clienteService = clienteService;
         }
 
-        // Método para obter apenas os nomes dos clientes
-        [HttpGet("nomes")]
-        public async Task<ActionResult<IEnumerable<string>>> GetClientNames()
+        [HttpPost]
+        public async Task<IActionResult> InsertClient([FromBody] ClienteDTO clienteDTO)
+        {
+            await _clienteService.InsertClient(clienteDTO);
+            return StatusCode(StatusCodes.Status201Created, "Cliente adicionado com sucesso");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetClients([FromQuery] ClienteParameters clienteParameters)
+        {
+            var clients = await _clienteService.GetClients(clienteParameters);
+            return Ok(clients);
+        }
+
+        [HttpGet("{id}/detalhes")]
+        public async Task<IActionResult> GetClientDetails(string id)
         {
             try
             {
-                var nomes = await _context.Clientes
-                    .Select(c => c.Nome)
-                    .ToListAsync();
-
-                if (nomes == null || !nomes.Any())
-                {
-                    return NotFound("Nenhum cliente encontrado.");
-                }
-
-                return Ok(nomes);
-            }
-            catch (Exception ex)
+                var clientDetails = await _clienteService.GetClientDetails(id);
+                return Ok(clientDetails);
+            }catch (Exception ex)
             {
-                return StatusCode(500, $"Erro interno: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new { status = "Error", message = $"Erro interno do servidor: {ex.Message}" });
             }
         }
     }

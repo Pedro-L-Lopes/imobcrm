@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace imobcrm.Models;
 public class ContaExtra
 {
-    public Guid IdContaExtra { get; set; } = Guid.NewGuid();
+    public Guid IdContaExtra { get; set; }
 
     public Guid ContratoId { get; set; } // Chave estrangeira para ContratoAluguel
 

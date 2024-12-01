@@ -1,7 +1,7 @@
 ﻿namespace imobcrm.Models;
 public class ContratoAluguel
 {
-    public Guid ContratoId { get; set; } = Guid.NewGuid();
+    public Guid ContratoId { get; set; }
 
     public Guid ImovelId { get; set; }
 

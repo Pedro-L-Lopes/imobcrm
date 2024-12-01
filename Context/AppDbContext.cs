@@ -43,7 +43,7 @@ public class AppDbContext : DbContext
             .ValueGeneratedOnAdd();
 
         modelBuilder.Entity<Localizacao>()
-               .HasKey(l => l.LocalizacaoId);
+              .HasKey(l => l.LocalizacaoId);
         modelBuilder.Entity<Localizacao>()
             .Property(l => l.LocalizacaoId)
             .ValueGeneratedOnAdd();

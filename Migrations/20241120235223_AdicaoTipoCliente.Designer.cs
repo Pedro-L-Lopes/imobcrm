@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using imobcrm.Context;
 
@@ -11,9 +12,11 @@ using imobcrm.Context;
 namespace imobcrm.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241120235223_AdicaoTipoCliente")]
+    partial class AdicaoTipoCliente
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -168,10 +171,6 @@ namespace imobcrm.Migrations
                     b.Property<byte?>("Banheiros")
                         .HasColumnType("tinyint unsigned");
 
-                    b.Property<string>("Cep")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<DateTime?>("DataAutorizacao")
                         .HasColumnType("datetime(6)");
 
@@ -179,15 +178,15 @@ namespace imobcrm.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<Guid>("EnderecoId")
+                        .HasColumnType("char(36)");
+
                     b.Property<string>("Finalidade")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<byte?>("Garagem")
                         .HasColumnType("tinyint unsigned");
-
-                    b.Property<int>("LocalizacaoId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Numero")
                         .IsRequired()
@@ -241,7 +240,7 @@ namespace imobcrm.Migrations
 
                     b.HasKey("ImovelId");
 
-                    b.HasIndex("LocalizacaoId");
+                    b.HasIndex("EnderecoId");
 
                     b.HasIndex("ProprietarioId");
 
@@ -250,13 +249,15 @@ namespace imobcrm.Migrations
 
             modelBuilder.Entity("imobcrm.Models.Localizacao", b =>
                 {
-                    b.Property<int>("LocalizacaoId")
+                    b.Property<Guid>("LocalizacaoId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("LocalizacaoId"));
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Bairro")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Cep")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -271,48 +272,6 @@ namespace imobcrm.Migrations
                     b.HasKey("LocalizacaoId");
 
                     b.ToTable("Localizacoes");
-                });
-
-            modelBuilder.Entity("imobcrm.Models.Locations.BairroCEP", b =>
-                {
-                    b.Property<int>("BairroCEPId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("BairroCEPId"));
-
-                    b.Property<string>("Bairro")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Cep")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("BairroCEPId");
-
-                    b.ToTable("BairroCEPs");
-                });
-
-            modelBuilder.Entity("imobcrm.Models.Locations.CidadeUF", b =>
-                {
-                    b.Property<int>("CidadeUFId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("CidadeUFId"));
-
-                    b.Property<string>("Cidade")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Estado")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("CidadeUFId");
-
-                    b.ToTable("CidadeUFs");
                 });
 
             modelBuilder.Entity("imobcrm.Models.PagamentoAluguel", b =>
@@ -425,9 +384,9 @@ namespace imobcrm.Migrations
 
             modelBuilder.Entity("imobcrm.Models.Imovel", b =>
                 {
-                    b.HasOne("imobcrm.Models.Localizacao", "Localizacao")
+                    b.HasOne("imobcrm.Models.Localizacao", "Endereco")
                         .WithMany()
-                        .HasForeignKey("LocalizacaoId")
+                        .HasForeignKey("EnderecoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -437,7 +396,7 @@ namespace imobcrm.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Localizacao");
+                    b.Navigation("Endereco");
 
                     b.Navigation("Proprietario");
                 });

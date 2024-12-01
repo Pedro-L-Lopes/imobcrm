@@ -66,8 +66,8 @@ namespace imobcrm.Validators
                 .WithMessage("A data de autorização não pode estar no futuro.");
 
             // Validação para EnderecoId
-            RuleFor(x => x.EnderecoId)
-                .NotEmpty().WithMessage("O ID do endereço é obrigatório.");
+            RuleFor(x => x.LocalizacaoId)
+                .NotEmpty().WithMessage("O ID da localização é obrigatório.");
 
             // Validação para Rua
             RuleFor(x => x.Rua)
