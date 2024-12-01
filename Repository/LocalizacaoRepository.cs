@@ -32,4 +32,16 @@ public class LocalizacaoRepository : ILocalizacaoRepository
 
         return localizacao;
     }
+
+    public async Task<List<Localizacao>> GetLocations(string bairroTerm, string cidadeTerm)
+    {
+        return await _context.Localizacoes
+            .Where(l =>
+                (string.IsNullOrEmpty(bairroTerm) || l.Bairro.ToLower().Contains(bairroTerm)) &&
+                (string.IsNullOrEmpty(cidadeTerm) || l.Cidade.ToLower().Contains(cidadeTerm)))
+            .OrderBy(l => l.Cidade)
+            .ThenBy(l => l.Bairro)
+            .Take(10)
+            .ToListAsync();
+    }
 }

@@ -28,4 +28,15 @@ public class LocalizacaoService : ILocalizacaoService
 
         await _uof.LocalizacaoRepository.InsertLocation(location);
     }
+
+    public async Task<List<Localizacao>> GetLocations(string term)
+    {
+        term = term.ToLower();
+
+        var parts = term.Split('-');
+        string bairroTerm = parts.Length > 0 ? parts[0].Trim() : "";
+        string cidadeTerm = parts.Length > 1 ? parts[1].Trim() : "";
+
+        return await _uof.LocalizacaoRepository.GetLocations(bairroTerm, cidadeTerm);
+    }
 }
