@@ -24,7 +24,8 @@ namespace imobcrm.Middlewares
         public async Task InvokeAsync(HttpContext context)
         {
             if ((context.Request.Path.StartsWithSegments("/cliente") && typeof(T) == typeof(ClienteDTO)) ||
-                (context.Request.Path.StartsWithSegments("/localizacao") && typeof(T) == typeof(LocalizacaoDTO)))
+                (context.Request.Path.StartsWithSegments("/localizacao") && typeof(T) == typeof(LocalizacaoDTO)) ||
+                (context.Request.Path.StartsWithSegments("/imovel") && typeof(T) == typeof(ImovelDTO)))
             {
                 if (context.Request.Method == HttpMethods.Post || context.Request.Method == HttpMethods.Put)
                 {

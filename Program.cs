@@ -30,6 +30,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Validações FluentValidation
 builder.Services.AddTransient<IValidator<ClienteDTO>, ClienteValidator>();
 builder.Services.AddTransient<IValidator<LocalizacaoDTO>, LocalizacaoValidator>();
+builder.Services.AddTransient<IValidator<ImovelDTO>, ImovelValidator>();
 
 // Configuração do AutoMapper
 builder.Services.AddAutoMapper(typeof(Program));
@@ -39,6 +40,8 @@ builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<ILocalizacaoRepository, LocalizacaoRepository>();
 builder.Services.AddScoped<ILocalizacaoService, LocalizacaoService>();
+builder.Services.AddScoped<IImovelRepository, ImovelRepository>();
+builder.Services.AddScoped<IImovelService, ImovelService>();
 
 // UOF
 builder.Services.AddScoped<IUnityOfWork, UnityOfWork>();
@@ -55,6 +58,7 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseValidationMiddleware<ClienteDTO>();
 app.UseValidationMiddleware<LocalizacaoDTO>();
+app.UseValidationMiddleware<ImovelDTO>();
 
 app.UseHttpsRedirection();
 

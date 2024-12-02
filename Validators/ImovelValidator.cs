@@ -1,16 +1,13 @@
 ﻿using FluentValidation;
+using imobcrm.DTOs;
 using imobcrm.Models;
 
 namespace imobcrm.Validators
 {
-    public class ImovelValidator : AbstractValidator<Imovel>
+    public class ImovelValidator : AbstractValidator<ImovelDTO>
     {
         public ImovelValidator()
         {
-            // Validação para ImovelId
-            RuleFor(x => x.ImovelId)
-                .NotEmpty().WithMessage("O ID do imóvel é obrigatório.");
-
             // Validação para ProprietarioId
             RuleFor(x => x.ProprietarioId)
                 .NotEmpty().WithMessage("O ID do proprietário é obrigatório.");

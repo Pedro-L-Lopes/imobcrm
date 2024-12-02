@@ -4,6 +4,7 @@ namespace imobcrm.DTOs;
 public class ImovelDTO
 {
     public Guid ProprietarioId { get; set; } // Relacionamento com Cliente
+    public Guid ImovelId { get; set; }
 
     public string Finalidade { get; set; }
     public string TipoImovel { get; set; }
