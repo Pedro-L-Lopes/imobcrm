@@ -18,6 +18,16 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions
         .ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("PermitirTudo", policy =>
+    {
+        policy.AllowAnyOrigin()  // Permite qualquer origem
+              .AllowAnyMethod()  // Permite qualquer método HTTP (GET, POST, etc.)
+              .AllowAnyHeader(); // Permite qualquer cabeçalho
+    });
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -31,6 +41,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddTransient<IValidator<ClienteDTO>, ClienteValidator>();
 builder.Services.AddTransient<IValidator<LocalizacaoDTO>, LocalizacaoValidator>();
 builder.Services.AddTransient<IValidator<ImovelDTO>, ImovelValidator>();
+builder.Services.AddTransient<IValidator<VisitaDTO>, VisitaValidator>();
 
 // Configuração do AutoMapper
 builder.Services.AddAutoMapper(typeof(Program));
@@ -42,6 +53,8 @@ builder.Services.AddScoped<ILocalizacaoRepository, LocalizacaoRepository>();
 builder.Services.AddScoped<ILocalizacaoService, LocalizacaoService>();
 builder.Services.AddScoped<IImovelRepository, ImovelRepository>();
 builder.Services.AddScoped<IImovelService, ImovelService>();
+builder.Services.AddScoped<IVisitaRepository, VisitaRepository>();
+builder.Services.AddScoped<IVisitaService, VisitaService>();
 
 // UOF
 builder.Services.AddScoped<IUnityOfWork, UnityOfWork>();
@@ -59,6 +72,9 @@ app.UseMiddleware<ExceptionMiddleware>();
 app.UseValidationMiddleware<ClienteDTO>();
 app.UseValidationMiddleware<LocalizacaoDTO>();
 app.UseValidationMiddleware<ImovelDTO>();
+app.UseValidationMiddleware<VisitaDTO>();
+
+app.UseCors("PermitirTudo");
 
 app.UseHttpsRedirection();
 

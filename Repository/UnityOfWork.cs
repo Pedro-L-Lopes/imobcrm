@@ -7,6 +7,7 @@ public class UnityOfWork : IUnityOfWork
     private IClienteRepository _clienteRepository;
     private ILocalizacaoRepository _localizacaoRepository;
     private IImovelRepository _imovelRepository;
+    private IVisitaRepository _visitaRepository;
     public AppDbContext _context;
 
     public UnityOfWork(AppDbContext context)
@@ -35,6 +36,14 @@ public class UnityOfWork : IUnityOfWork
         get
         {
             return _imovelRepository ??= new ImovelRepository(_context, this);
+        }
+    }
+
+    public IVisitaRepository VisitaRepository
+    {
+        get
+        {
+            return _visitaRepository ??= new VisitaRepository(_context, this);
         }
     }
 

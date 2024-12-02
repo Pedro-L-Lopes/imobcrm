@@ -22,13 +22,18 @@ namespace imobcrm.Validators
                 .NotEmpty().WithMessage("O tipo de imóvel é obrigatório.")
                 .MaximumLength(45).WithMessage("O tipo de imóvel deve ter no máximo 45 caracteres.");
 
+            // Validação para Situacao
+            RuleFor(x => x.Situacao)
+                .NotEmpty().WithMessage("A situação é obrigatória.")
+                .MaximumLength(45).WithMessage("A situcação deve ter no máximo 45 caracteres.");
+
             // Validação para Valor
             RuleFor(x => x.Valor)
                 .GreaterThanOrEqualTo(0).WithMessage("O valor deve ser maior ou igual a zero.");
 
             // Validação para SiteCod
             RuleFor(x => x.SiteCod)
-                .GreaterThan(0).WithMessage("O código do site deve ser maior que zero.");
+                .MaximumLength(15).WithMessage("O código pode ter no máximo 15 digitos");
 
             // Validação para ValorCondominio
             RuleFor(x => x.ValorCondominio)

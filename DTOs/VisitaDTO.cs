@@ -6,6 +6,7 @@ public class VisitaDTO
     public string Situacao { get; set; } // Ex: "confirmada", "cancelada"
 
     public int Codigo { get; set; }
+    public string? ClienteNome { get; set; }
 
     public Guid ClienteId { get; set; } // Chave estrangeira para Cliente
 

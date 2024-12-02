@@ -9,9 +9,9 @@ public class Visita
 
     public int Codigo { get; set; }
 
-    public Guid? ClienteId { get; set; } // Chave estrangeira para Cliente
+    public Guid ClienteId { get; set; } // Chave estrangeira para Cliente
 
-    public Guid? ImovelId { get; set; } // Chave estrangeira para Imovel
+    public Guid ImovelId { get; set; } // Chave estrangeira para Imovel
 
     public string Observacao { get; set; }
 

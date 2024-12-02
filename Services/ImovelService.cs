@@ -2,6 +2,7 @@
 using imobcrm.DTOs;
 using imobcrm.Errors;
 using imobcrm.Models;
+using imobcrm.Pagination;
 using imobcrm.Repository.Interfaces;
 using imobcrm.Services.Interfaces;
 using System.Net;
@@ -41,6 +42,7 @@ public class ImovelService : IImovelService
             ProprietarioId = imovelDTO.ProprietarioId,
             Finalidade = imovelDTO.Finalidade,
             TipoImovel = imovelDTO.TipoImovel,
+            Situacao = imovelDTO.Situacao,
             Valor = imovelDTO.Valor,
             SiteCod = imovelDTO.SiteCod,
             ValorCondominio = imovelDTO.ValorCondominio,
@@ -66,4 +68,14 @@ public class ImovelService : IImovelService
         await _uof.ImovelRepository.InsertProperty(property);
     }
 
+    public async Task<PagedList<ImovelDTO>> GetPropertys(ImovelParameters imovelParameters)
+    {
+        var pagedPropertys = await _uof.ImovelRepository.GetPropertys(imovelParameters);
+
+        var clientDTOs = pagedPropertys.Items
+            .Select(property => _mapper.Map<ImovelDTO>(property))
+            .ToList();
+
+        return new PagedList<ImovelDTO>(clientDTOs, pagedPropertys.TotalCount, imovelParameters.PageNumber, imovelParameters.PageSize);
+    }
 }

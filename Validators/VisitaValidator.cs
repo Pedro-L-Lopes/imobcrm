@@ -1,9 +1,10 @@
 ﻿using FluentValidation;
+using imobcrm.DTOs;
 using imobcrm.Models;
 
 namespace imobcrm.Validators
 {
-    public class VisitaValidator : AbstractValidator<Visita>
+    public class VisitaValidator : AbstractValidator<VisitaDTO>
     {
         public VisitaValidator()
         {

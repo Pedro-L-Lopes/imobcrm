@@ -10,8 +10,9 @@ public class Imovel
 
     public string Finalidade { get; set; }
     public string TipoImovel { get; set; }
+    public string Situacao { get; set; }
     public decimal Valor { get; set; }
-    public int SiteCod { get; set; }
+    public string SiteCod { get; set; }
     public decimal? ValorCondominio { get; set; }
     public float? Area { get; set; }
     public string Observacoes { get; set; }
@@ -32,6 +33,7 @@ public class Imovel
     public string Cep{ get; set; }
 
     public int LocalizacaoId { get; set; }
+    public DateTime DataCricao {  get; set; } = DateTime.UtcNow;
     public Localizacao Localizacao { get; set; }
 
     // Propriedade de Navegação
