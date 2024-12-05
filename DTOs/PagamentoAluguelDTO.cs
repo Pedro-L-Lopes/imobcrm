@@ -2,6 +2,7 @@
 public class PagamentoAluguelDTO
 {
     public Guid ContratoId { get; set; } // Chave estrangeira para ContratoAluguel
+    public int Codigo { get; set; }
 
     public DateTime PeriodoInicio { get; set; }
 
@@ -14,4 +15,5 @@ public class PagamentoAluguelDTO
     public DateTime DataVencimentoAluguel { get; set; }
 
     public DateTime? DataPagamento { get; set; }
+    public DateTime? UltimaEdicao { get; set; }
 }

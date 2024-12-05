@@ -20,7 +20,7 @@ namespace imobcrm.Controllers
         public async Task<IActionResult> InsertClient([FromBody] ClienteDTO clienteDTO)
         {
             await _clienteService.InsertClient(clienteDTO);
-            return StatusCode(StatusCodes.Status201Created, "Cliente adicionado com sucesso");
+            return Ok(new { message = "Cliente adicionado com sucesso" });
         }
 
         [HttpGet]

@@ -2,6 +2,7 @@
 public class ContratoAluguel
 {
     public Guid ContratoId { get; set; }
+    public int Codigo { get; set; }
 
     public Guid ImovelId { get; set; }
 
@@ -30,6 +31,8 @@ public class ContratoAluguel
     public string StatusContrato { get; set; } = "ativo";
 
     public DateTime? UltimaRenovacao { get; set; }
+
+    public DateTime? UltimaEdicao { get; set; }
 
     public byte TempoContrato { get; set; }
 

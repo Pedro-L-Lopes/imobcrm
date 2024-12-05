@@ -15,6 +15,8 @@ public class Visita
 
     public string Observacao { get; set; }
 
+    public DateTime? UltimaEdicao { get; set; }
+
     // Propriedades de Navegação
     public Cliente Cliente { get; set; }
 

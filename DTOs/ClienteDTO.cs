@@ -2,6 +2,7 @@
 public class ClienteDTO
 {
     public Guid ClienteId { get; set; }
+    public int Codigo { get; set; }
 
     public string TipoCliente { get; set; }
 
@@ -16,4 +17,5 @@ public class ClienteDTO
     public char? Sexo { get; set; } // Use 'M' para Masculino, 'F' para Feminino, etc.
 
     public DateTime? DataNascimento { get; set; }
+    public DateTime? UltimaEdicao { get; set; }
 }

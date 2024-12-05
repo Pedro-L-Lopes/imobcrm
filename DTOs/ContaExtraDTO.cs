@@ -6,6 +6,7 @@ namespace imobcrm.DTOs;
 public class ContaExtraDTO
 {
     public Guid ContratoId { get; set; } // Chave estrangeira para ContratoAluguel
+    public int Codigo { get; set; }
 
     public string TipoConta { get; set; } // Ex: "luz", "água", "IPTU"
 
@@ -18,4 +19,5 @@ public class ContaExtraDTO
     public decimal Valor { get; set; }
 
     public DateTime? DataPagamento { get; set; }
+    public DateTime? UltimaEdicao { get; set; }
 }

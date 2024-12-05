@@ -3,6 +3,7 @@ public class Cliente
 {
     public Guid ClienteId { get; set; }
     public string TipoCliente { get; set; }
+    public int Codigo { get; set; }
 
     public string Nome { get; set; }
 
@@ -17,6 +18,8 @@ public class Cliente
     public DateTime? DataNascimento { get; set; }
 
     public DateTime DataCriacao { get; set; } = DateTime.UtcNow;
+
+    public DateTime? UltimaEdicao { get; set; }
 
     // Propriedade de Navegação - um cliente pode ter vários imóveis
     public ICollection<Imovel> Imoveis { get; set; }

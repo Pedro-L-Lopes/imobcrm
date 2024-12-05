@@ -21,11 +21,9 @@ namespace imobcrm.Validators
                 .EmailAddress().WithMessage("O e-mail informado é inválido.")
                 .MaximumLength(100).WithMessage("O e-mail deve ter no máximo 100 caracteres.");
 
-            RuleFor(c => c.Telefone)
-                .Matches(@"^\(?\d{2}\)?\s?\d{4,5}-\d{4}$").WithMessage("O formato do telefone é inválido.");
-
             RuleFor(c => c.CpfCnpj)
-                .Matches(@"^\d{11}$|^\d{14}$").WithMessage("O CPF deve ter 11 dígitos ou o CNPJ deve ter 14 dígitos.");
+                .NotEmpty().WithMessage("O CPF/CNPJ não pode ficar vazio");
+                //.Matches(@"^\d{11}$|^\d{14}$").WithMessage("O CPF deve ter 11 dígitos ou o CNPJ deve ter 14 dígitos.");
 
             RuleFor(c => c.Sexo)
                 .Must(s => s == null || s == 'M' || s == 'F')

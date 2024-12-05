@@ -4,6 +4,7 @@ namespace imobcrm.DTOs;
 public class ContratoAluguelDTO
 {
     public Guid ImovelId { get; set; }
+    public int Codigo { get; set; }
 
     public Imovel Imovel { get; set; }
 
@@ -32,4 +33,5 @@ public class ContratoAluguelDTO
     public DateTime? UltimaRenovacao { get; set; }
 
     public byte TempoContrato { get; set; }
+    public DateTime? UltimaEdicao { get; set; }
 }

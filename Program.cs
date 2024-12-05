@@ -67,6 +67,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors("PermitirTudo");
 
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseValidationMiddleware<ClienteDTO>();
@@ -74,7 +75,6 @@ app.UseValidationMiddleware<LocalizacaoDTO>();
 app.UseValidationMiddleware<ImovelDTO>();
 app.UseValidationMiddleware<VisitaDTO>();
 
-app.UseCors("PermitirTudo");
 
 app.UseHttpsRedirection();
 

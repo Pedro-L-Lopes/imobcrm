@@ -25,7 +25,7 @@ public class VisitaController : ControllerBase
         return StatusCode(StatusCodes.Status201Created, "Visita adicionada com sucesso");
     }
 
-    [HttpGet("search")]
+    [HttpGet]
     public async Task<IActionResult> GetVisits([FromQuery] VisitaParameters visitaParameters)
     {
         var visits = await _visitaService.GetVisits(visitaParameters);

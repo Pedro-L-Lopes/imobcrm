@@ -5,6 +5,7 @@ namespace imobcrm.Models;
 public class PagamentoAluguel
 {
     public Guid PagamentoAluguelId { get; set; }
+    public int Codigo { get; set; }
 
     public Guid ContratoId { get; set; } // Chave estrangeira para ContratoAluguel
 
@@ -19,6 +20,8 @@ public class PagamentoAluguel
     public DateTime DataVencimentoAluguel { get; set; }
 
     public DateTime? DataPagamento { get; set; }
+
+    public DateTime? UltimaEdicao { get; set; }
 
     // Propriedade de Navegação
     public ContratoAluguel Contrato { get; set; }

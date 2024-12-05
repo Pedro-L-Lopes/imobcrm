@@ -5,6 +5,7 @@ namespace imobcrm.Models;
 public class ContaExtra
 {
     public Guid IdContaExtra { get; set; }
+    public int Codigo { get; set; }
 
     public Guid ContratoId { get; set; } // Chave estrangeira para ContratoAluguel
 
@@ -19,6 +20,8 @@ public class ContaExtra
     public decimal Valor { get; set; }
 
     public DateTime? DataPagamento { get; set; }
+
+    public DateTime? UltimaEdicao { get; set; }
 
     public ContratoAluguel ContratoAluguel { get; set; }
 }

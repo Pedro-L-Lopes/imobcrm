@@ -13,4 +13,6 @@ public class VisitaDTO
     public Guid ImovelId { get; set; } // Chave estrangeira para Imovel
 
     public string Observacao { get; set; }
+
+    public DateTime? UltimaEdicao { get; set; }
 }

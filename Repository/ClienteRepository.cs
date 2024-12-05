@@ -22,6 +22,7 @@ namespace imobcrm.Repository
 
         public async Task<Cliente> InsertClient(Cliente cliente)
         {
+            // Verifica se já existe um cliente com o CPF ou CNPJ
             var clienteExistsWithDocument = await _context.Clientes
                 .AnyAsync(c => c.CpfCnpj == cliente.CpfCnpj);
 
@@ -30,15 +31,32 @@ namespace imobcrm.Repository
                 throw new CustomException(HttpStatusCode.BadRequest, "Já existe um cliente com este CPF ou CNPJ.");
             }
 
+            // Busca o maior 'Codigo' existente e incrementa para o novo cliente
+            var ultimoCodigo = await _context.Clientes
+                .MaxAsync(c => (int?)c.Codigo) ?? 0;  // Retorna 0 se não houver clientes ainda
+
+            cliente.Codigo = ultimoCodigo + 1;  // Atribui o próximo código sequencial
+
             _context.Clientes.Add(cliente);
-            await _uof.Commit();
+            await _uof.Commit();  // Commit da transação
 
             return cliente;
         }
 
+
         public async Task<PagedList<Cliente>> GetClients(ClienteParameters clienteParameters)
         {
             var query = _context.Clientes.AsNoTracking();
+
+            // Aplicando filtro de pesquisa
+            if (!string.IsNullOrWhiteSpace(clienteParameters.SearchTerm))
+            {
+                string searchTerm = clienteParameters.SearchTerm.ToLower();
+                query = query.Where(c =>
+                    c.Nome.ToLower().Contains(searchTerm) ||
+                    c.Email.ToLower().Contains(searchTerm) ||
+                    c.CpfCnpj.ToLower().Contains(searchTerm));
+            }
 
             // Aplicando ordenação dinâmica
             query = clienteParameters.OrderBy.ToLower() switch

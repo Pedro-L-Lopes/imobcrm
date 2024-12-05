@@ -20,4 +20,7 @@ public class ClienteParameters
     // Parâmetros de ordenação
     public string OrderBy { get; set; } = "Nome"; // Campo padrão para ordenação
     public string SortDirection { get; set; } = "asc"; // Direção padrão
+
+    // Parâmetro de pesquisa
+    public string? SearchTerm { get; set; }
 }
