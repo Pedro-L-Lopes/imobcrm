@@ -26,6 +26,12 @@ public class ImovelDTO
     public byte? Varanda { get; set; }
     public byte? Garagem { get; set; }
 
+    public bool? Avaliacao { get; set; }
+    public decimal AvaliacaoValor { get; set; }
+    public DateTime? DataAvaliacao { get; set; }
+
+    public bool? ComPlaca {  get; set; }
+
     public decimal? ValorAutorizacao { get; set; }
     public string? TipoAutorizacao { get; set; }
     public DateTime? DataAutorizacao { get; set; }
@@ -34,7 +40,7 @@ public class ImovelDTO
     public string? Numero { get; set; }
     public string? Cep { get; set; }
 
-    public DateTime DataCricao {  get; set; }
+    public DateTime DataCriacao {  get; set; }
 
     public int LocalizacaoId { get; set; }
 

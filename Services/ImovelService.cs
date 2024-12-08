@@ -42,6 +42,7 @@ public class ImovelService : IImovelService
             ProprietarioId = imovelDTO.ProprietarioId,
             Finalidade = imovelDTO.Finalidade,
             TipoImovel = imovelDTO.TipoImovel,
+            Destinacao = imovelDTO.Destinação,
             Situacao = imovelDTO.Situacao,
             Valor = imovelDTO.Valor,
             SiteCod = imovelDTO.SiteCod,
@@ -56,13 +57,18 @@ public class ImovelService : IImovelService
             SalasJantar = imovelDTO.SalasJantar,
             Varanda = imovelDTO.Varanda,
             Garagem = imovelDTO.Garagem,
+            Avaliacao = imovelDTO.Avaliacao,
+            AvaliacaoValor = imovelDTO.AvaliacaoValor,
+            DataAvaliacao = imovelDTO.DataAvaliacao,
+            ComPlaca = imovelDTO.ComPlaca,
             ValorAutorizacao = imovelDTO.ValorAutorizacao,
             TipoAutorizacao = imovelDTO.TipoAutorizacao,
             DataAutorizacao = imovelDTO.DataAutorizacao,
             Rua = imovelDTO.Rua,
             Numero = imovelDTO.Numero,
             Cep = imovelDTO.Cep,
-            LocalizacaoId = imovelDTO.LocalizacaoId
+            LocalizacaoId = imovelDTO.LocalizacaoId,
+            UltimaEdicao = DateTime.UtcNow
         };
 
         await _uof.ImovelRepository.InsertProperty(property);

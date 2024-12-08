@@ -84,7 +84,7 @@ namespace imobcrm.Migrations
                     Varanda = table.Column<byte>(type: "tinyint unsigned", nullable: true),
                     Garagem = table.Column<byte>(type: "tinyint unsigned", nullable: true),
                     ValorAutorizacao = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
-                    TipoAutorizacao = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false)
+                    TipoAutorizacao = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     DataAutorizacao = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     EnderecoId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),

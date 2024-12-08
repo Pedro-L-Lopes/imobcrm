@@ -61,7 +61,7 @@ public class ExceptionMiddleware
             title = "Erro inesperado.",
             status = StatusCodes.Status500InternalServerError,
             traceId = context.TraceIdentifier,
-            message = "Ocorreu um erro interno no servidor."
+            message = "Desculpe, Ocorreu um erro interno no servidor."
         };
 
         context.Response.StatusCode = StatusCodes.Status500InternalServerError; // Erro 500 para exceções não tratadas

@@ -29,6 +29,7 @@ namespace imobcrm.Services
                 CpfCnpj = clienteDTO.CpfCnpj,
                 Sexo = clienteDTO.Sexo,
                 DataNascimento = clienteDTO.DataNascimento,
+                UltimaEdicao = DateTime.UtcNow
             };
 
             await _uof.ClienteRepository.InsertClient(client);

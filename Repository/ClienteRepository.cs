@@ -38,7 +38,7 @@ namespace imobcrm.Repository
             cliente.Codigo = ultimoCodigo + 1;  // Atribui o próximo código sequencial
 
             _context.Clientes.Add(cliente);
-            await _uof.Commit();  // Commit da transação
+            await _uof.Commit();
 
             return cliente;
         }
@@ -55,6 +55,7 @@ namespace imobcrm.Repository
                 query = query.Where(c =>
                     c.Nome.ToLower().Contains(searchTerm) ||
                     c.Email.ToLower().Contains(searchTerm) ||
+                    c.Codigo.ToString().Contains(searchTerm) ||
                     c.CpfCnpj.ToLower().Contains(searchTerm));
             }
 
@@ -73,7 +74,15 @@ namespace imobcrm.Repository
                             ? query.OrderBy(c => c.Sexo)
                             : query.OrderByDescending(c => c.Sexo),
 
-                _ => query.OrderBy(c => c.Nome) // Ordenação padrão
+                "ultimaedicao" => clienteParameters.SortDirection.ToLower() == "asc"
+                            ? query.OrderBy(c => c.UltimaEdicao)
+                            : query.OrderByDescending(c => c.UltimaEdicao),
+
+                "codigo" => clienteParameters.SortDirection.ToLower() == "asc"
+                            ? query.OrderBy(c => c.Codigo)
+                            : query.OrderByDescending(c => c.Codigo),
+
+                _ => query.OrderBy(c => c.UltimaEdicao)
             };
 
             var totalCount = await query.CountAsync();
@@ -92,7 +101,6 @@ namespace imobcrm.Repository
                 .Where(c => c.ClienteId == clientId)
                 .Select(c => new ClienteDTO
                 {
-                    ClienteId = c.ClienteId,
                     Nome = c.Nome,
                     Email = c.Email,
                     Telefone = c.Telefone,
@@ -100,6 +108,7 @@ namespace imobcrm.Repository
                     CpfCnpj = c.CpfCnpj,
                     Sexo = c.Sexo,
                     DataNascimento = c.DataNascimento,
+                    UltimaEdicao = c.UltimaEdicao
                 }).FirstOrDefaultAsync();
 
             return client!;

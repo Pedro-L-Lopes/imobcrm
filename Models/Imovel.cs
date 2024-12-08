@@ -17,8 +17,9 @@ public class Imovel
     public string? SiteCod { get; set; }
     public decimal? ValorCondominio { get; set; }
     public float? Area { get; set; }
-    public string Observacoes { get; set; }
-    public string Descricao { get; set; }
+    public string? Observacoes { get; set; }
+    public string? Descricao { get; set; }
+
     public byte? Quartos { get; set; }
     public byte? Suites { get; set; }
     public byte? Banheiros { get; set; }
@@ -26,6 +27,13 @@ public class Imovel
     public byte? SalasJantar { get; set; }
     public byte? Varanda { get; set; }
     public byte? Garagem { get; set; }
+
+    public bool? Avaliacao { get; set; }
+    public decimal AvaliacaoValor { get; set; }
+    public DateTime? DataAvaliacao { get; set; }
+
+    public bool? ComPlaca { get; set; }
+
     public decimal? ValorAutorizacao { get; set; }
     public string? TipoAutorizacao { get; set; }
     public DateTime? DataAutorizacao { get; set; }
@@ -37,7 +45,7 @@ public class Imovel
     public DateTime? UltimaEdicao { get; set; }
 
     public int LocalizacaoId { get; set; }
-    public DateTime DataCricao {  get; set; } = DateTime.UtcNow;
+    public DateTime DataCriacao {  get; set; } = DateTime.UtcNow;
 
     public Localizacao Localizacao { get; set; }
 
