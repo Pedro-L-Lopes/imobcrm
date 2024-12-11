@@ -51,6 +51,7 @@ namespace imobcrm.Validators
 
             // Validação para Descricao
             RuleFor(x => x.Descricao)
+                .NotEmpty().WithMessage("A descrição é obrigatória")
                 .MaximumLength(255).WithMessage("A descrição deve ter no máximo 255 caracteres.");
 
             // Validação para ValorAutorizacao

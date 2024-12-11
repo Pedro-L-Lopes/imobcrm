@@ -53,5 +53,11 @@ namespace imobcrm.Services
             var client = await _uof.ClienteRepository.GetClientDetails(clientIdGuid);
             return _mapper.Map<ClienteDTO>(client);
         }
+
+        public async Task<List<ClienteDTO>> GetClientsByNameAndDocument(string term)
+        {
+            var clients = await _uof.ClienteRepository.GetClientsByNameAndDocument(term);
+            return _mapper.Map<List<ClienteDTO>>(clients);
+        }
     }
 }

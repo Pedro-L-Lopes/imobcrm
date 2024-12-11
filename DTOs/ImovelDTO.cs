@@ -8,7 +8,7 @@ public class ImovelDTO
     public Guid ImovelId { get; set; }
 
     public string Finalidade { get; set; }
-    public string Destinação { get; set; }
+    public string Destinacao { get; set; }
     public string TipoImovel { get; set; }
     public string Situacao { get; set; }
     public decimal Valor { get; set; }

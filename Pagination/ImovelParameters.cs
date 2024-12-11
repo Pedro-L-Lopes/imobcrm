@@ -26,6 +26,7 @@ public class ImovelParameters
     public string? TipoImovel { get; set; }
     public string? Situacao { get; set; }
     public string? Cidade { get; set; }
+    public string? Bairro { get; set; }
     public bool? Avaliacao { get; set; }
     public bool? ComPlaca { get; set; }
     public string? TipoAutorizacao { get; set; }

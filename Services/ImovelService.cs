@@ -42,7 +42,7 @@ public class ImovelService : IImovelService
             ProprietarioId = imovelDTO.ProprietarioId,
             Finalidade = imovelDTO.Finalidade,
             TipoImovel = imovelDTO.TipoImovel,
-            Destinacao = imovelDTO.Destinação,
+            Destinacao = imovelDTO.Destinacao,
             Situacao = imovelDTO.Situacao,
             Valor = imovelDTO.Valor,
             SiteCod = imovelDTO.SiteCod,

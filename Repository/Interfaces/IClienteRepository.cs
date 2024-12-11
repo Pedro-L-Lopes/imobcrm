@@ -8,4 +8,5 @@ public interface IClienteRepository
     Task<Cliente> InsertClient(Cliente cliente);
     Task<PagedList<Cliente>> GetClients(ClienteParameters clienteParameters);
     Task<ClienteDTO> GetClientDetails(Guid clientId);
+    Task<List<Cliente>> GetClientsByNameAndDocument(string term);
 }

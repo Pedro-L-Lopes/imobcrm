@@ -60,6 +60,11 @@ public class ImovelRepository : IImovelRepository
         {
             query = query.Where(i => i.Localizacao.Cidade.ToLower() == imovelParameters.Cidade.ToLower());
         }
+        
+        if (!string.IsNullOrEmpty(imovelParameters.Bairro))
+        {
+            query = query.Where(i => i.Localizacao.Bairro.ToLower() == imovelParameters.Bairro.ToLower());
+        }
 
         if (imovelParameters.Avaliacao.HasValue)
         {
@@ -120,7 +125,7 @@ public class ImovelRepository : IImovelRepository
             Codigo = i.Codigo,
             ProprietarioId = i.ProprietarioId,
             Finalidade = i.Finalidade,
-            Destinação = i.Destinacao,
+            Destinacao = i.Destinacao,
             TipoImovel = i.TipoImovel,
             Situacao = i.Situacao,
             Valor = i.Valor,

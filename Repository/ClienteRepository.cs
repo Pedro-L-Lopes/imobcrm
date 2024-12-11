@@ -101,6 +101,7 @@ namespace imobcrm.Repository
                 .Where(c => c.ClienteId == clientId)
                 .Select(c => new ClienteDTO
                 {
+                    ClienteId = c.ClienteId,
                     Nome = c.Nome,
                     Email = c.Email,
                     Telefone = c.Telefone,
@@ -113,5 +114,28 @@ namespace imobcrm.Repository
 
             return client!;
         }
+
+        public async Task<List<Cliente>> GetClientsByNameAndDocument(string term)
+        {
+            var clients = await _context.Clientes
+                .Where(c => c.CpfCnpj.Contains(term) || c.Nome.Contains(term))
+                .Take(10)
+                .Select(c => new Cliente
+                {
+                    ClienteId = c.ClienteId,
+                    Nome = c.Nome,
+                    Codigo = c.Codigo,
+                    TipoCliente = c.TipoCliente,
+                    CpfCnpj = c.CpfCnpj,
+                    Email = c.Email,
+                    Telefone = c.Telefone,
+                    UltimaEdicao = c.UltimaEdicao
+                }).AsNoTracking().ToListAsync();
+
+            Console.WriteLine(clients);
+
+            return clients;
+        }
+
     }
 }
