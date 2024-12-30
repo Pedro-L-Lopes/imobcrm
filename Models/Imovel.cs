@@ -38,6 +38,8 @@ public class Imovel
     public string? TipoAutorizacao { get; set; }
     public DateTime? DataAutorizacao { get; set; }
 
+    public DateTime UltimaPubliRedes { get; set; } // Data da ultima publicação nas redes sociais
+
     public string? Rua { get; set; }
     public string? Numero { get; set; }
     public string? Cep{ get; set; }

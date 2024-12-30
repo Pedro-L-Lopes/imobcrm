@@ -24,13 +24,29 @@ public class LocalizacaoRepository : ILocalizacaoRepository
 
         if (exists)
         {
-            throw new CustomException(HttpStatusCode.BadRequest, "Este bairro-cidade já está cadastrado");
+            throw new CustomException(HttpStatusCode.BadRequest, "Esta localização já está cadastrada");
         }
+
+        // Busca o maior 'Codigo' existente e incrementa para o novo cliente
+        var ultimoCodigo = await _context.Localizacoes
+            .MaxAsync(c => (int?)c.Codigo) ?? 0;  // Retorna 0 se não houver clientes ainda
+
+        localizacao.Codigo = ultimoCodigo + 1;  // Atribui o próximo código sequencial
 
         _context.Localizacoes.Add(localizacao);
         await _uof.Commit();
 
         return localizacao;
+    }
+
+    public async Task<List<Localizacao>> GetLocationsByOneTerm(string term)
+    {
+        return await _context.Localizacoes
+            .Where(l => l.Bairro.ToLower().Contains(term.ToLower()) || l.Cidade.ToLower().Contains(term.ToLower()))
+            .OrderBy(l => l.Cidade)
+            .ThenBy(l => l.Bairro)
+            .Take(50)
+            .ToListAsync();
     }
 
     public async Task<List<Localizacao>> GetLocations(string bairroTerm, string cidadeTerm)
@@ -41,7 +57,7 @@ public class LocalizacaoRepository : ILocalizacaoRepository
                 (string.IsNullOrEmpty(cidadeTerm) || l.Cidade.ToLower().Contains(cidadeTerm)))
             .OrderBy(l => l.Cidade)
             .ThenBy(l => l.Bairro)
-            .Take(10)
+            .Take(50)
             .ToListAsync();
     }
 }

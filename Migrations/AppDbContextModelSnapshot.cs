@@ -117,11 +117,22 @@ namespace imobcrm.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
+                    b.Property<string>("AnotacoesGerais")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<int>("Codigo")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DataCriacao")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("DataRescisao")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("DestinacaoContrato")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime?>("FimContrato")
                         .HasColumnType("datetime(6)");
@@ -138,12 +149,26 @@ namespace imobcrm.Migrations
                     b.Property<Guid>("LocatarioId")
                         .HasColumnType("char(36)");
 
-                    b.Property<decimal>("OutrosValores")
-                        .HasColumnType("decimal(65,30)");
+                    b.Property<DateTime?>("PrimeiroAluguel")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Rescisao")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("SemMultaApos")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("StatusContrato")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<byte>("TaxaAdm")
+                        .HasColumnType("tinyint unsigned");
+
+                    b.Property<byte>("TaxaIntermediacao")
+                        .HasColumnType("tinyint unsigned");
 
                     b.Property<byte>("TempoContrato")
                         .HasColumnType("tinyint unsigned");
@@ -211,7 +236,6 @@ namespace imobcrm.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Descricao")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Destinacao")
@@ -232,7 +256,6 @@ namespace imobcrm.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("Observacoes")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<Guid>("ProprietarioId")

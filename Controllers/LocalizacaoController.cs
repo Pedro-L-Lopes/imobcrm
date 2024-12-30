@@ -19,7 +19,7 @@ namespace imobcrm.Controllers
         }
 
         /// <summary>
-        /// Insere uma nova localização (bairro e cidade).
+        /// Insere uma nova localização (bairro, cidade e estado).
         /// </summary>
         /// <param name="localizacaoDTO">Dados da localização.</param>
         /// <response code="201">Bairro-Cidade adicionado com sucesso.</response>
@@ -33,16 +33,37 @@ namespace imobcrm.Controllers
             }
 
             await _locationService.InsertLocation(localizacaoDTO);
-            return StatusCode(StatusCodes.Status201Created, "Bairro-Cidade adicionado com sucesso");
+            return Ok(new { message = "Localização adicionada com sucesso"});
         }
 
         /// <summary>
-        /// Pesquisa localizações por termo.
+        /// Pesquisa localizações por termo em um unico campo .
         /// </summary>
-        /// <param name="term">Termo de pesquisa (bairro ou cidade).</param>
+        /// <param name="term">Termo de pesquisa em um unico campo (bairro ou cidade).</param>
         /// <response code="200">Resultados encontrados.</response>
         /// <response code="400">Termo de pesquisa não pode ser vazio.</response>
-        [HttpGet("search")]
+        [HttpGet("search1")]
+        public async Task<IActionResult> SearchLocationsByOneTerm([FromQuery] string term)
+        {
+            if (string.IsNullOrWhiteSpace(term))
+            {
+                return BadRequest("O termo de pesquisa não pode ser vazio.");
+            }
+
+            var results = await _locationService.GetLocationsByOneTerm(term);
+            return Ok(results);
+        }
+
+        /// <summary>
+        /// Pesquisa localizações por termo em dois campos.
+        /// </summary>
+        /// <param name="term">Termo de pesquisa em dois campos (bairro ou cidade) separado por -
+        /// Exemplo Centro-São Paulo
+        /// 
+        /// .</param>
+        /// <response code="200">Resultados encontrados.</response>
+        /// <response code="400">Termo de pesquisa não pode ser vazio.</response>
+        [HttpGet("search2")]
         public async Task<IActionResult> SearchLocations([FromQuery] string term)
         {
             if (string.IsNullOrWhiteSpace(term))

@@ -29,6 +29,11 @@ public class LocalizacaoService : ILocalizacaoService
         await _uof.LocalizacaoRepository.InsertLocation(location);
     }
 
+    public async Task<List<Localizacao>> GetLocationsByOneTerm(string term)
+    {
+        return await _uof.LocalizacaoRepository.GetLocationsByOneTerm(term);
+    }
+
     public async Task<List<Localizacao>> GetLocations(string term)
     {
         term = term.ToLower();

@@ -4,6 +4,7 @@ using imobcrm.Models;
 using imobcrm.Pagination;
 using imobcrm.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace imobcrm.Repository;
 public class ImovelRepository : IImovelRepository
@@ -24,9 +25,6 @@ public class ImovelRepository : IImovelRepository
             .MaxAsync(c => (int?)c.Codigo) ?? 0;  // Retorna 0 se não houver clientes ainda
 
         imovel.Codigo = ultimoCodigo + 1;  // Atribui o próximo código sequencial
-
-        Console.WriteLine(imovel.Codigo);
-        Console.WriteLine(ultimoCodigo + 1);
 
         _context.Imoveis.Add(imovel);
         await _uof.Commit();
@@ -163,6 +161,66 @@ public class ImovelRepository : IImovelRepository
         return new PagedList<ImovelDTO>(imovelDTOs, totalCount, imovelParameters.PageNumber, imovelParameters.PageSize);
     }
 
+    public async Task<List<ImovelDTO>> SearchProperties(SearcheImovelParameters searcheImovelParameters, string term)
+    {
+        // Verifica se o termo de busca é numérico
+        bool isNumeric = int.TryParse(term, out int termAsInt);
 
+        // Base da consulta com relacionamentos incluídos
+        var query = _context.Imoveis
+            .Include(i => i.Localizacao) // Inclui a navegação Localizacao
+            .Include(i => i.Proprietario) // Inclui a navegação Proprietario
+            .AsNoTracking();
 
+        // Filtra por Finalidade, se fornecida
+        if (!string.IsNullOrEmpty(searcheImovelParameters.Finalidade))
+        {
+            string finalidadeLower = searcheImovelParameters.Finalidade.ToLower();
+            query = query.Where(i => i.Finalidade.ToLower() == finalidadeLower);
+        }
+        
+        if (!string.IsNullOrEmpty(searcheImovelParameters.Situacao))
+        {
+            string SituacaoLower = searcheImovelParameters.Situacao.ToLower();
+            query = query.Where(i => i.Situacao.ToLower() == SituacaoLower);
+        }
+
+        // Filtra por termo de busca
+        query = query.Where(i =>
+            i.Rua.Contains(term) ||
+            i.Cep.Contains(term) ||
+            i.Localizacao.Bairro.Contains(term) ||
+            i.Localizacao.Cidade.Contains(term) ||
+            i.Proprietario.Nome.Contains(term) ||
+            (isNumeric && i.Codigo == termAsInt)
+        );
+
+        // Ordena a consulta
+        query = query.OrderBy(i => i.Codigo).ThenBy(i => i.Rua);
+
+        // Projeta os resultados na estrutura ImovelDTO
+        var properties = await query
+            .Select(i => new ImovelDTO
+            {
+                Codigo = i.Codigo,
+                ImovelId = i.ImovelId,
+                ProprietarioId = i.ProprietarioId,
+                ProprietarioNome  = i.Proprietario!.Nome,
+                Numero = i.Numero,
+                Rua = i.Rua,
+                Bairro = i.Localizacao.Bairro,
+                Cidade = i.Localizacao.Cidade,
+                Estado = i.Localizacao.Estado,
+                Cep = i.Cep,
+                Destinacao = i.Destinacao,
+                Finalidade = i.Finalidade,
+                TipoImovel = i.TipoImovel,
+                Valor = i.Valor,
+                ValorCondominio = i.ValorCondominio,
+            })
+            .Take(50) // Limita o número de resultados
+            .ToListAsync();
+
+        return properties;
+    }
 }

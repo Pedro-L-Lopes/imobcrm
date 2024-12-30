@@ -30,6 +30,12 @@ public class VisitaRepository : IVisitaRepository
             throw new CustomException(HttpStatusCode.BadRequest, "Já existe uma visita neste horario.");
         }
 
+        // Busca o maior 'Codigo' existente e incrementa para o novo cliente
+        var ultimoCodigo = await _context.Visitas
+            .MaxAsync(c => (int?)c.Codigo) ?? 0;  // Retorna 0 se não houver clientes ainda
+
+        visita.Codigo = ultimoCodigo + 1;  // Atribui o próximo código sequencial
+
         _context.Visitas.Add(visita);
         await _uof.Commit();
 
@@ -39,16 +45,29 @@ public class VisitaRepository : IVisitaRepository
     public async Task<PagedList<VisitaDTO>> GetVisits(VisitaParameters visitaParameters)
     {
         var query = _context.Visitas
-            .Include(i => i.Imovel)
-            .Include(i => i.Cliente)
+            .Include(v => v.Imovel)
+            .ThenInclude(i => i.Localizacao)
+            .Include(v => v.Cliente)
             .AsNoTracking();
 
-          // Aplica o filtro de situação apenas se o parâmetro não for nulo ou vazio
+        // Filtro por situação
         if (!string.IsNullOrWhiteSpace(visitaParameters.Situacao))
         {
-            query = query.Where(i => i.Situacao.Trim().ToLower() == visitaParameters.Situacao.Trim().ToLower());
+            query = query.Where(v => v.Situacao.Trim().ToLower() == visitaParameters.Situacao.Trim().ToLower());
         }
 
+        // Filtro por intervalo de datas
+        if (visitaParameters.DataInicio.HasValue)
+        {
+            query = query.Where(v => v.DataHora >= visitaParameters.DataInicio.Value);
+        }
+
+        if (visitaParameters.DataFim.HasValue)
+        {
+            query = query.Where(v => v.DataHora <= visitaParameters.DataFim.Value);
+        }
+
+        // Ordenação dinâmica
         query = visitaParameters.OrderBy.ToLower() switch
         {
             "datahora" => visitaParameters.SortDirection.ToLower() == "asc"
@@ -66,16 +85,31 @@ public class VisitaRepository : IVisitaRepository
 
         var visitasDTO = items.Select(v => new VisitaDTO
         {
+            VisitaId = v.VisitaId,
             ClienteId = v.ClienteId,
             ClienteNome = v.Cliente.Nome,
             Codigo = v.Codigo,
             DataHora = v.DataHora,
             ImovelId = v.ImovelId,
             Observacao = v.Observacao,
-            Situacao = v.Situacao
+            Situacao = v.Situacao,
+            UltimaEdicao = v.UltimaEdicao,
+            CEP = v.Imovel.Cep,
+            Rua = v.Imovel.Rua,
+            Bairro = v.Imovel.Localizacao.Bairro,
+            Cidade = v.Imovel.Localizacao.Cidade,
+            Estado = v.Imovel.Localizacao.Estado,
+            ClienteEmail = v.Cliente.Email,
+            ClienteTelefone = v.Cliente.Telefone,
+            ClienteDocumento = v.Cliente.CpfCnpj,
+            FinalidadeVisita = v.Imovel.Finalidade,
+            Destincao = v.Imovel.Destinacao,
+            ValorImovel = v.Imovel.Valor
         });
 
         return new PagedList<VisitaDTO>(visitasDTO, totalCount, visitaParameters.PageNumber, visitaParameters.PageSize);
     }
+
+
 
 }

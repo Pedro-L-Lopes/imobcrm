@@ -70,10 +70,6 @@ namespace imobcrm.Repository
                             ? query.OrderBy(c => c.TipoCliente)
                             : query.OrderByDescending(c => c.TipoCliente),
 
-                "sexo" => clienteParameters.SortDirection.ToLower() == "asc"
-                            ? query.OrderBy(c => c.Sexo)
-                            : query.OrderByDescending(c => c.Sexo),
-
                 "ultimaedicao" => clienteParameters.SortDirection.ToLower() == "asc"
                             ? query.OrderBy(c => c.UltimaEdicao)
                             : query.OrderByDescending(c => c.UltimaEdicao),
@@ -102,6 +98,7 @@ namespace imobcrm.Repository
                 .Select(c => new ClienteDTO
                 {
                     ClienteId = c.ClienteId,
+                    Codigo = c.Codigo,
                     Nome = c.Nome,
                     Email = c.Email,
                     Telefone = c.Telefone,
@@ -109,6 +106,7 @@ namespace imobcrm.Repository
                     CpfCnpj = c.CpfCnpj,
                     Sexo = c.Sexo,
                     DataNascimento = c.DataNascimento,
+                    DataCriacao = c.DataCriacao,
                     UltimaEdicao = c.UltimaEdicao
                 }).FirstOrDefaultAsync();
 
@@ -117,9 +115,15 @@ namespace imobcrm.Repository
 
         public async Task<List<Cliente>> GetClientsByNameAndDocument(string term)
         {
+            bool isNumeric = int.TryParse(term, out int termAsInt);
+
             var clients = await _context.Clientes
-                .Where(c => c.CpfCnpj.Contains(term) || c.Nome.Contains(term))
-                .Take(10)
+                .Where(c => c.CpfCnpj.Contains(term) ||
+                            c.Nome.Contains(term) ||
+                            (isNumeric && c.Codigo == termAsInt))
+                .OrderBy(c => c.Codigo)
+                .ThenBy(c => c.Nome)
+                .Take(25)
                 .Select(c => new Cliente
                 {
                     ClienteId = c.ClienteId,
@@ -130,12 +134,13 @@ namespace imobcrm.Repository
                     Email = c.Email,
                     Telefone = c.Telefone,
                     UltimaEdicao = c.UltimaEdicao
-                }).AsNoTracking().ToListAsync();
-
-            Console.WriteLine(clients);
+                })
+                .AsNoTracking()
+                .ToListAsync();
 
             return clients;
         }
+
 
     }
 }

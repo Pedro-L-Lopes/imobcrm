@@ -22,7 +22,7 @@ public class VisitaController : ControllerBase
     public async Task<IActionResult> InsertVisit([FromBody] VisitaDTO visitaDTO)
     {
         await _visitaService.InsertVisit(visitaDTO);
-        return StatusCode(StatusCodes.Status201Created, "Visita adicionada com sucesso");
+        return Ok(new { message = "Visita adicionada com sucesso" });
     }
 
     [HttpGet]

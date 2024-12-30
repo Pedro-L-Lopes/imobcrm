@@ -84,4 +84,10 @@ public class ImovelService : IImovelService
 
         return new PagedList<ImovelDTO>(clientDTOs, pagedPropertys.TotalCount, imovelParameters.PageNumber, imovelParameters.PageSize);
     }
+
+    public async Task<List<ImovelDTO>> SearchProperties(SearcheImovelParameters searcheImovelParameters, string term)
+    {
+        var propertys = await _uof.ImovelRepository.SearchProperties(searcheImovelParameters, term);
+        return _mapper.Map<List<ImovelDTO>>(propertys);
+    }
 }

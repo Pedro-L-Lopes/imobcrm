@@ -5,5 +5,6 @@ public interface IUnityOfWork
     ILocalizacaoRepository LocalizacaoRepository { get; }
     IImovelRepository ImovelRepository { get; }
     IVisitaRepository VisitaRepository{ get; }
+    IContratoAluguelRepository ContratoAluguelRepository { get; }
     Task Commit();
 }

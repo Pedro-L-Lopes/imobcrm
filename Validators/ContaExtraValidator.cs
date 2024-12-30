@@ -7,40 +7,40 @@ namespace imobcrm.Validators
     {
         public ContaExtraValidator()
         {
-            // Validação para o ContratoId
+            RuleFor(x => x.IdContaExtra)
+                .NotEmpty().WithMessage("O ID da conta extra é obrigatório.");
+
+            RuleFor(x => x.Codigo)
+                .GreaterThan(0).WithMessage("O código deve ser maior que zero.");
+
             RuleFor(x => x.ContratoId)
                 .NotEmpty().WithMessage("O ID do contrato é obrigatório.");
 
-            // Validação para TipoConta
             RuleFor(x => x.TipoConta)
                 .NotEmpty().WithMessage("O tipo da conta é obrigatório.")
-                .MaximumLength(50).WithMessage("O tipo da conta deve ter no máximo 50 caracteres.");
+                .MaximumLength(100).WithMessage("O tipo da conta deve ter no máximo 100 caracteres.");
 
-            // Validação para CodigoConta
             RuleFor(x => x.CodigoConta)
                 .MaximumLength(50).WithMessage("O código da conta deve ter no máximo 50 caracteres.");
 
-            // Validação para DataVencimento
-            RuleFor(x => x.DataVencimento)
-                .NotEmpty().WithMessage("A data de vencimento é obrigatória.")
-                .Must(date => date.Date >= DateTime.UtcNow.Date).WithMessage("A data de vencimento não pode ser no passado.");
-
-            // Validação para StatusPagamento
             RuleFor(x => x.StatusPagamento)
                 .NotEmpty().WithMessage("O status do pagamento é obrigatório.")
-                .MaximumLength(20).WithMessage("O status do pagamento deve ter no máximo 20 caracteres.")
-                .Must(status => status == "em dia" || status == "em atraso")
-                .WithMessage("O status do pagamento deve ser 'em dia' ou 'em atraso'.");
+                .MaximumLength(50).WithMessage("O status do pagamento deve ter no máximo 50 caracteres.")
+                .Must(status => new[] { "Pendente", "Pago", "Atrasado", "Cancelado", "Em revisão" }.Contains(status))
+                .WithMessage("O status do pagamento deve ser um dos valores permitidos: pendente, Pago, Atrasado, Cancelado, Em revisão.");
 
-            // Validação para Valor
             RuleFor(x => x.Valor)
                 .GreaterThan(0).WithMessage("O valor deve ser maior que zero.");
 
-            // Validação para DataPagamento
-            RuleFor(x => x.DataPagamento)
-                .GreaterThanOrEqualTo(x => x.DataVencimento)
+            RuleFor(x => x.Observacoes)
+                .NotEmpty().WithMessage("As observações são obrigatórias.")
+                .MaximumLength(500).WithMessage("As observações devem ter no máximo 500 caracteres.");
+
+            RuleFor(x => x.Recorrente)
+                .NotNull().WithMessage("O campo 'Recorrente' é obrigatório.")
                 .When(x => x.DataPagamento.HasValue)
-                .WithMessage("A data de pagamento não pode ser anterior à data de vencimento.");
+                .WithMessage("Se houver data de pagamento, a recorrência deve ser especificada.");
+
         }
     }
 }

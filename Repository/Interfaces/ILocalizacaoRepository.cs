@@ -5,5 +5,6 @@ namespace imobcrm.Repository.Interfaces;
 public interface ILocalizacaoRepository
 {
     Task<Localizacao> InsertLocation(Localizacao localizacao);
-    Task<List<Localizacao>> GetLocations(string bairroTerm, string cidadeTerm);
+    Task<List<Localizacao>> GetLocations(string term1, string term2);
+    Task<List<Localizacao>> GetLocationsByOneTerm(string term);
 }

@@ -108,6 +108,8 @@ builder.Services.AddScoped<IImovelRepository, ImovelRepository>();
 builder.Services.AddScoped<IImovelService, ImovelService>();
 builder.Services.AddScoped<IVisitaRepository, VisitaRepository>();
 builder.Services.AddScoped<IVisitaService, VisitaService>();
+builder.Services.AddScoped<IContratoAluguelRepository, ContratoAluguelRepository>();
+builder.Services.AddScoped<IContratoAluguelService, ContratoAluguelService>();
 
 // UOF
 builder.Services.AddScoped<IUnityOfWork, UnityOfWork>();

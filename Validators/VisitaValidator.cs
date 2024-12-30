@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using imobcrm.DTOs;
-using imobcrm.Models;
 
 namespace imobcrm.Validators
 {
@@ -8,35 +7,38 @@ namespace imobcrm.Validators
     {
         public VisitaValidator()
         {
-            // Validação para DataHora
+            RuleFor(x => x.VisitaId)
+                .NotEmpty().WithMessage("O ID da visita é obrigatório.");
+
             RuleFor(x => x.DataHora)
-                .NotEmpty().WithMessage("A data e hora da visita são obrigatórias.")
-                .GreaterThanOrEqualTo(DateTime.Now)
-                .WithMessage("A data e hora da visita não podem ser no passado.");
+                .NotEmpty().WithMessage("A data e hora da visita são obrigatórias.");
 
-            // Validação para Situacao
             RuleFor(x => x.Situacao)
-                .MaximumLength(50).WithMessage("A situação deve ter no máximo 50 caracteres.")
-                .Must(x => x == null || x == "confirmada" || x == "cancelada")
-                .WithMessage("A situação deve ser 'confirmada' ou 'cancelada', ou estar vazia.");
+                .NotEmpty().WithMessage("A situação da visita é obrigatória.")
+                .MaximumLength(25).WithMessage("A situação da visita deve ter no máximo 25 caracteres.")
+                .Must(situacao => new[]
+                {
+                    "pendente", "confirmada", "cancelada", "reagendada", "em_andamento",
+                    "concluida", "nao_compareceu", "em_atendimento"
+                }.Contains(situacao))
+                .WithMessage("A situação da visita deve ser um dos valores permitidos.");
 
-            // Validação para Codigo
             RuleFor(x => x.Codigo)
-                .GreaterThan(0).WithMessage("O código deve ser maior que zero.");
+                .GreaterThan(0).WithMessage("O código da visita deve ser maior que zero.");
 
-            // Validação para ClienteId
             RuleFor(x => x.ClienteId)
-                .NotEmpty().WithMessage("O ID do cliente é obrigatório.")
-                .Must(x => x != Guid.Empty).WithMessage("O ID do cliente deve ser válido.");
+                .NotEmpty().WithMessage("O ID do cliente é obrigatório.");
 
-            // Validação para ImovelId
             RuleFor(x => x.ImovelId)
-                .NotEmpty().WithMessage("O ID do imóvel é obrigatório.")
-                .Must(x => x != Guid.Empty).WithMessage("O ID do imóvel deve ser válido.");
+                .NotEmpty().WithMessage("O ID do imóvel é obrigatório.");
 
-            // Validação para Observacao
             RuleFor(x => x.Observacao)
-                .MaximumLength(100).WithMessage("A observação deve ter no máximo 100 caracteres.");
+                .MaximumLength(500).WithMessage("A observação deve ter no máximo 500 caracteres.");
+
+            RuleFor(x => x.UltimaEdicao)
+                .GreaterThanOrEqualTo(x => x.DataHora)
+                .When(x => x.UltimaEdicao.HasValue)
+                .WithMessage("A última edição não pode ser anterior à data e hora da visita.");
         }
     }
 }

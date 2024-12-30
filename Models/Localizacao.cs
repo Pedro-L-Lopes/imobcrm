@@ -7,6 +7,6 @@ public class Localizacao
     public string Cidade { get; set; }
 
     public string Estado { get; set; }
-
+    
     public DateTime? UltimaEdicao { get; set; }
 }
