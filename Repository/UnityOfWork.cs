@@ -9,6 +9,9 @@ public class UnityOfWork : IUnityOfWork
     private IImovelRepository _imovelRepository;
     private IVisitaRepository _visitaRepository;
     private IContratoAluguelRepository _contratoAluguelRepository;
+    private IContaExtraRepository _contaExtraRepository;
+    private IContaFixaRepository _contaFixaRepository;
+    private IPagamentoAluguelRepository _pagamentoAluguelRepository;
 
     public AppDbContext _context;
 
@@ -48,12 +51,36 @@ public class UnityOfWork : IUnityOfWork
             return _visitaRepository ??= new VisitaRepository(_context, this);
         }
     }
-    
+
     public IContratoAluguelRepository ContratoAluguelRepository
     {
         get
         {
             return _contratoAluguelRepository ??= new ContratoAluguelRepository(_context, this);
+        }
+    }
+
+    public IContaExtraRepository ContaExtraRepository
+    {
+        get
+        {
+            return _contaExtraRepository ??= new ContaExtraRepository(_context, this);
+        }
+    }
+
+    public IContaFixaRepository ContaFixaRepository
+    {
+        get
+        {
+            return _contaFixaRepository ??= new ContaFixaRepository(_context, this);
+        }
+    }
+
+    public IPagamentoAluguelRepository PagamentoAluguelRepository
+    {
+        get
+        {
+            return _pagamentoAluguelRepository ??= new PagamentoAluguelRepository(_context, this);
         }
     }
 

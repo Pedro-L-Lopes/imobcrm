@@ -28,10 +28,10 @@ public class LocalizacaoRepository : ILocalizacaoRepository
         }
 
         // Busca o maior 'Codigo' existente e incrementa para o novo cliente
-        var ultimoCodigo = await _context.Localizacoes
+        var lastCode = await _context.Localizacoes
             .MaxAsync(c => (int?)c.Codigo) ?? 0;  // Retorna 0 se não houver clientes ainda
 
-        localizacao.Codigo = ultimoCodigo + 1;  // Atribui o próximo código sequencial
+        localizacao.Codigo = lastCode + 1;  // Atribui o próximo código sequencial
 
         _context.Localizacoes.Add(localizacao);
         await _uof.Commit();

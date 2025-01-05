@@ -32,10 +32,10 @@ namespace imobcrm.Repository
             }
 
             // Busca o maior 'Codigo' existente e incrementa para o novo cliente
-            var ultimoCodigo = await _context.Clientes
+            var lastCode = await _context.Clientes
                 .MaxAsync(c => (int?)c.Codigo) ?? 0;  // Retorna 0 se não houver clientes ainda
 
-            cliente.Codigo = ultimoCodigo + 1;  // Atribui o próximo código sequencial
+            cliente.Codigo = lastCode + 1;  // Atribui o próximo código sequencial
 
             _context.Clientes.Add(cliente);
             await _uof.Commit();

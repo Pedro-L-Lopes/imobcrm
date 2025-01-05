@@ -9,6 +9,7 @@ public class PagamentoAluguelDTO
     public DateTime PeriodoFim { get; set; }
 
     public decimal? ValorPago { get; set; }
+    public string? ReferenciaPagamento { get; set; } // Ex: "Jan/2025"
 
     public string StatusPagamento { get; set; } = "em dia"; // "em dia", "em atraso"
 

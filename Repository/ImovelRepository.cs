@@ -1,9 +1,12 @@
 ﻿using imobcrm.Context;
 using imobcrm.DTOs;
+using imobcrm.Errors;
 using imobcrm.Models;
 using imobcrm.Pagination;
 using imobcrm.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Contracts;
+using System.Net;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace imobcrm.Repository;
@@ -222,5 +225,79 @@ public class ImovelRepository : IImovelRepository
             .ToListAsync();
 
         return properties;
+    }
+
+    public async Task ChangeStatus(Guid propertyId, string status)
+    {
+
+        var property = await _context.Imoveis.FindAsync(propertyId);
+        if (property == null)
+        {
+            throw new CustomException( HttpStatusCode.NotFound, "Imóvel não encontrado.");
+        }
+
+        property.Situacao = status;
+        property.UltimaEdicao = DateTime.UtcNow;
+
+        _context.Imoveis.Update(property);
+        await _uof.Commit();
+    }
+
+    public async Task<ImovelDTO> Getproperty(Guid propertyId)
+    {
+        var property = await _context.Imoveis
+            .Include(i => i.Localizacao)
+            .Include(i => i.Proprietario)
+            .Where(i => i.ImovelId == propertyId)
+            .Select(i => new ImovelDTO
+            {
+                 Area = i.Area,
+                 Avaliacao = i.Avaliacao,
+                 AvaliacaoValor = i.AvaliacaoValor,
+                 Bairro = i.Localizacao.Bairro,
+                 Banheiros = i.Banheiros,
+                 Cep = i.Cep,
+                 Cidade = i.Localizacao.Cidade,
+                 Codigo = i.Codigo,
+                 ComPlaca = i.ComPlaca,
+                 DataAutorizacao = i.DataAutorizacao,
+                 DataAvaliacao = i.DataAvaliacao,
+                 DataCriacao = i.DataCriacao,
+                 Descricao = i.Descricao,
+                 Destinacao = i.Destinacao,
+                 Estado = i.Localizacao.Estado,
+                 Finalidade = i.Finalidade,
+                 Garagem = i.Garagem,
+                 ImovelId = i.ImovelId,
+                 LocalizacaoId = i.LocalizacaoId,
+                 Numero = i.Numero,
+                 Observacoes = i.Observacoes,
+                 ProprietarioId = i.ProprietarioId,
+                 ProprietarioNome = i.Proprietario.Nome,
+                 Quartos = i.Quartos,
+                 Rua = i.Rua,
+                 SalasEstar = i.SalasEstar,
+                 SalasJantar = i.SalasJantar,
+                 SiteCod = i.SiteCod,
+                 Situacao = i.Situacao,
+                 Suites = i.Suites,
+                 TipoAutorizacao = i.TipoAutorizacao,
+                 TipoImovel = i.TipoImovel,
+                 UltimaEdicao = i.UltimaEdicao,
+                 UltimaPubliRedes = i.UltimaPubliRedes,
+                 Valor = i.Valor,
+                 ValorAutorizacao = i.ValorAutorizacao,
+                 ValorCondominio = i.ValorCondominio,
+                 Varanda = i.Varanda,
+                 ProprietarioCode = i.Proprietario.Codigo,
+            })
+            .FirstOrDefaultAsync();
+
+        if (property == null)
+        {
+            throw new CustomException(HttpStatusCode.NotFound, "Imóvel não encontrado.");
+        }
+
+        return property;
     }
 }

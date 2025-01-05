@@ -25,7 +25,7 @@ public class ContratoAluguelResumoDTO
 
 
     public string StatusContrato { get; set; } = "ativo";
-    //public DateTime DataRescisao { get; set; }
+    public DateTime DataRescisao { get; set; }
 
     public byte TempoContrato { get; set; }
 

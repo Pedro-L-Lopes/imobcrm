@@ -14,7 +14,7 @@ public class ContaExtra
     public string? CodigoConta { get; set; } // Código externo de consulta
 
     public DateTime? DataVencimento { get; set; }
-
+    
     public string StatusPagamento { get; set; } = "Em dia"; // "em dia", "em atraso"
 
     public string? Observacoes { get; set; }

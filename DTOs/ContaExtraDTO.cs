@@ -7,7 +7,7 @@ public class ContaExtraDTO
 {
     public Guid IdContaExtra { get; set; }
 
-    public Guid ContratoId { get; set; } // Chave estrangeira para ContratoAluguel
+    public Guid ContratoId { get; set; }
     public int Codigo { get; set; }
 
     public string TipoConta { get; set; } // Ex: "luz", "água", "IPTU"

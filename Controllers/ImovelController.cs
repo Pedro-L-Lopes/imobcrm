@@ -1,5 +1,6 @@
 ﻿using imobcrm.DTOs;
 using imobcrm.Pagination;
+using imobcrm.Services;
 using imobcrm.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -60,6 +61,20 @@ namespace imobcrm.Controllers
         {
             var propertys = await _imovelService.SearchProperties(searcheImovelParameters, term);
             return Ok(propertys);
+        }
+
+        [HttpPatch("mudarStatus")]
+        public async Task<IActionResult> ChangeStatus(string imovelId, string status)
+        {
+            await _imovelService.ChangeStatus(imovelId, status);
+            return StatusCode(StatusCodes.Status204NoContent, new { mensagem = "Status do imóvel atualizado com sucesso" });
+        }
+
+        [HttpGet("{propertyId}")]
+        public async Task<IActionResult> Getproperty(string propertyId)
+        {
+            var property = await _imovelService.Getproperty(propertyId);
+            return Ok(property);
         }
     }
 }

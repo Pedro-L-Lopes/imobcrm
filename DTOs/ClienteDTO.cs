@@ -17,6 +17,8 @@ public class ClienteDTO
     public char? Sexo { get; set; } // Use 'M' para Masculino, 'F' para Feminino, etc.
 
     public DateTime? DataNascimento { get; set; }
+    public string? Endereco { get; set; }
+
     public DateTime? DataCriacao { get; set; }
     public DateTime? UltimaEdicao { get; set; }
 }

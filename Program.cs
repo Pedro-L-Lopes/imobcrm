@@ -102,14 +102,27 @@ builder.Services.AddAutoMapper(typeof(Program));
 // Services e Repositórios
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 builder.Services.AddScoped<IClienteService, ClienteService>();
+
 builder.Services.AddScoped<ILocalizacaoRepository, LocalizacaoRepository>();
 builder.Services.AddScoped<ILocalizacaoService, LocalizacaoService>();
+
 builder.Services.AddScoped<IImovelRepository, ImovelRepository>();
 builder.Services.AddScoped<IImovelService, ImovelService>();
+
 builder.Services.AddScoped<IVisitaRepository, VisitaRepository>();
 builder.Services.AddScoped<IVisitaService, VisitaService>();
+
 builder.Services.AddScoped<IContratoAluguelRepository, ContratoAluguelRepository>();
 builder.Services.AddScoped<IContratoAluguelService, ContratoAluguelService>();
+
+builder.Services.AddScoped<IContaExtraRepository, ContaExtraRepository>();
+builder.Services.AddScoped<IContaExtraService, ContaExtraService>();
+
+builder.Services.AddScoped<IContaFixaRepository, ContaFixaRepository>();
+builder.Services.AddScoped<IContaFixaService, ContaFixaService>();
+
+builder.Services.AddScoped<IPagamentoAluguelRepository, PagamentoAluguelRepository>();
+builder.Services.AddScoped<IPagamentoAluguelService, PagamentoAluguelService>();
 
 // UOF
 builder.Services.AddScoped<IUnityOfWork, UnityOfWork>();

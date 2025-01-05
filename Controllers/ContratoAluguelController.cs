@@ -33,8 +33,12 @@ public class ContratoAluguelController : ControllerBase
     public async Task<IActionResult> InsertContract([FromBody] ContratoAluguelDTO contratoAluguelDTO)
     {
         await _contratoAluguelService.InsertContract(contratoAluguelDTO);
-        return Ok(new { message = "Contrato adicionado com sucesso" });
+
+        // Retornar o contrato atualizado com os valores gerados
+        return CreatedAtRoute(nameof(GetContract), new { id = contratoAluguelDTO.ContratoId }, contratoAluguelDTO);
     }
+
+
 
     /// <summary>
     /// Recupera uma lista paginada de contratos de aluguel com base nos parâmetros de filtragem, ordenação e paginação fornecidos.
@@ -51,5 +55,12 @@ public class ContratoAluguelController : ControllerBase
     {
         var contracts = await _contratoAluguelService.GetContracts(contratoAluguelParameters);
         return Ok(contracts);
+    }
+
+    [HttpGet("{id}", Name = "GetContract")]
+    public async Task<IActionResult> GetContract(string id)
+    {
+        var contract = await _contratoAluguelService.GetContract(id);
+        return Ok(contract);
     }
 }

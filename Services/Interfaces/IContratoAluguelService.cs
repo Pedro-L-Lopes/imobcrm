@@ -7,4 +7,5 @@ public interface IContratoAluguelService
 {
     Task InsertContract(ContratoAluguelDTO contratoAluguelDTO);
     Task<PagedList<ContratoAluguelResumoDTO>> GetContracts(ContratoAluguelParameters contratoAluguelParameters);
+    Task<ContratoAluguelDTO> GetContract(string contractId);
 }

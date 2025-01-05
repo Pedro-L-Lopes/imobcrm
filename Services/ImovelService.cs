@@ -90,4 +90,19 @@ public class ImovelService : IImovelService
         var propertys = await _uof.ImovelRepository.SearchProperties(searcheImovelParameters, term);
         return _mapper.Map<List<ImovelDTO>>(propertys);
     }
+
+    public async Task ChangeStatus(string propertyId, string status)
+    {
+        Guid propertyIdGuid = Guid.Parse(propertyId);
+
+        await _uof.ImovelRepository.ChangeStatus(propertyIdGuid, status);
+    }
+
+    public async Task<ImovelDTO> Getproperty(string propertyId)
+    {
+        Guid propertyIdGuid = Guid.Parse(propertyId);
+
+        var property = await _uof.ImovelRepository.Getproperty(propertyIdGuid);
+        return _mapper.Map<ImovelDTO>(property);
+    }
 }

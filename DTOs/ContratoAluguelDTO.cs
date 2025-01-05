@@ -1,4 +1,5 @@
 ﻿using imobcrm.Models;
+using System.Text.Json.Serialization;
 
 namespace imobcrm.DTOs;
 public class ContratoAluguelDTO
@@ -10,9 +11,12 @@ public class ContratoAluguelDTO
 
     public Guid LocadorId { get; set; }
     public string? LocadorNome { get; set; }
+    public int? CodigoLocador { get; set; }
 
     public Guid LocatarioId { get; set; }
-    public string? locatarioNome { get; set; }
+    public string? LocatarioNome { get; set; }
+    public int? CodigoLocatario { get; set; }
+
     public decimal ValorContrato { get; set; }
     public DateTime? PrimeiroAluguel { get; set; }
 
@@ -55,4 +59,11 @@ public class ContratoAluguelDTO
     public string? Bairro { get; set; }
     public string? Cidade { get; set; }
     public string? Estado { get; set; }
+
+    [JsonIgnore]
+    public Cliente? Locatario { get; set; }
+    [JsonIgnore]
+    public Cliente? Locador { get; set; }
+    [JsonIgnore]
+    public Imovel? Imovel { get; set; }
 }

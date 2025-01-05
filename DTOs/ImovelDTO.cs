@@ -50,6 +50,7 @@ public class ImovelDTO
     public string? Cidade { get; set; }
     public string? Estado { get; set; }
     public string? ProprietarioNome { get; set; }
+    public int? ProprietarioCode { get; set; }
     public DateTime? UltimaEdicao { get; set; }
 
 }

@@ -13,6 +13,7 @@ public class AppDbContext : DbContext
     public DbSet<ContratoAluguel> ContratosAluguel { get; set; }
     public DbSet<PagamentoAluguel> PagamentoAlugueis { get; set; }
     public DbSet<ContaExtra> ContasExtras { get; set; }
+    public DbSet<ContaFixa> ContasFixas { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -28,6 +29,12 @@ public class AppDbContext : DbContext
                .HasKey(ce => ce.IdContaExtra);
         modelBuilder.Entity<ContaExtra>()
             .Property(ce => ce.IdContaExtra)
+            .ValueGeneratedOnAdd();
+
+        modelBuilder.Entity<ContaFixa>()
+               .HasKey(cf => cf.ContaFixaId);
+        modelBuilder.Entity<ContaFixa>()
+            .Property(cf => cf.ContaFixaId)
             .ValueGeneratedOnAdd();
 
         modelBuilder.Entity<ContratoAluguel>()

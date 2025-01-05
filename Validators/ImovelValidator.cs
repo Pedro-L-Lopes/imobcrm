@@ -48,7 +48,6 @@ namespace imobcrm.Validators
                 .MaximumLength(1000).WithMessage("As observações devem ter no máximo 1000 caracteres.");
 
             RuleFor(x => x.Descricao)
-                .NotEmpty().WithMessage("A descrição é obrigatória")
                 .MaximumLength(1000).WithMessage("A descrição deve ter no máximo 1000 caracteres.");
 
             RuleFor(x => x.AvaliacaoValor)

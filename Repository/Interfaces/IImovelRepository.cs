@@ -8,4 +8,6 @@ public interface IImovelRepository
     Task<Imovel> InsertProperty(Imovel imovel);
     Task<PagedList<ImovelDTO>> GetPropertys(ImovelParameters imovelParameters);
     Task<List<ImovelDTO>> SearchProperties(SearcheImovelParameters searcheImovelParameters, string term);
+    Task ChangeStatus(Guid propertyId, string status);
+    Task<ImovelDTO> Getproperty(Guid propertyId);
 }

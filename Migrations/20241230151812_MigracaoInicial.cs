@@ -27,6 +27,8 @@ namespace imobcrm.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Email = table.Column<string>(type: "varchar(100)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    Endereco = table.Column<string>(type: "varchar(255)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Telefone = table.Column<string>(type: "varchar(25)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CpfCnpj = table.Column<string>(type: "varchar(25)", nullable: true)
@@ -159,7 +161,7 @@ namespace imobcrm.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     SemMultaApos = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    AnotacoesGerais = table.Column<string>(type: "varchar(1000)", nullable: false)
+                    AnotacoesGerais = table.Column<string>(type: "varchar(1000)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     DataRescisao = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     UltimaRenovacao = table.Column<DateTime>(type: "datetime(6)", nullable: true),
@@ -268,6 +270,8 @@ namespace imobcrm.Migrations
                     PeriodoFim = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     ValorPago = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
                     StatusPagamento = table.Column<string>(type: "varchar(50)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ReferenciaPagamento = table.Column<string>(type: "varchar(20)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     DataVencimentoAluguel = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     DataPagamento = table.Column<DateTime>(type: "datetime(6)", nullable: true),
