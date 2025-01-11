@@ -9,5 +9,6 @@ public interface IUnityOfWork
     IContaExtraRepository ContaExtraRepository { get; }
     IContaFixaRepository ContaFixaRepository { get; }
     IPagamentoAluguelRepository PagamentoAluguelRepository { get; }
+    IControleAluguelRepository ControleAluguelRepository { get; }
     Task Commit();
 }

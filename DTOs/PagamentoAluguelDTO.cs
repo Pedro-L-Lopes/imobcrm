@@ -17,4 +17,5 @@ public class PagamentoAluguelDTO
 
     public DateTime? DataPagamento { get; set; }
     public DateTime? UltimaEdicao { get; set; }
+
 }

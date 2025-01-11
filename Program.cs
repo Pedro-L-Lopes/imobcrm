@@ -124,6 +124,9 @@ builder.Services.AddScoped<IContaFixaService, ContaFixaService>();
 builder.Services.AddScoped<IPagamentoAluguelRepository, PagamentoAluguelRepository>();
 builder.Services.AddScoped<IPagamentoAluguelService, PagamentoAluguelService>();
 
+builder.Services.AddScoped<IControleAluguelRepository, ControleAluguelRepository>();
+builder.Services.AddScoped<IControleAluguelService, ControleAluguelService>();
+
 // UOF
 builder.Services.AddScoped<IUnityOfWork, UnityOfWork>();
 

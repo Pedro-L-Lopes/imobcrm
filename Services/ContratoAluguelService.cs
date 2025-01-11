@@ -31,11 +31,9 @@ public class ContratoAluguelService : IContratoAluguelService
             FimContrato = contratoAluguelDTO.FimContrato,
             TempoContrato = contratoAluguelDTO.TempoContrato,
             StatusContrato = contratoAluguelDTO.StatusContrato,
-            UltimaRenovacao = DateTime.UtcNow,
             ValorContrato = contratoAluguelDTO.ValorContrato,
             VencimentoAluguel = contratoAluguelDTO.VencimentoAluguel,
             ValorCondominio = contratoAluguelDTO.ValorCondominio,
-            UltimaEdicao = DateTime.UtcNow,
             AnotacoesGerais = contratoAluguelDTO.AnotacoesGerais,
             DestinacaoContrato = contratoAluguelDTO.DestinacaoContrato,
             PrimeiroAluguel = contratoAluguelDTO.PrimeiroAluguel,
@@ -47,9 +45,6 @@ public class ContratoAluguelService : IContratoAluguelService
 
         // Persistir no banco
         var savedContract = await _uof.ContratoAluguelRepository.InsertContract(contract);
-
-        // Gerar pagamentos automaticamente
-        await _pagamentoAluguelService.GeneratePayments(savedContract.ContratoId, 0);
 
         // Atualiza os campos gerados no DTO para retorno
         contratoAluguelDTO.ContratoId = savedContract.ContratoId;

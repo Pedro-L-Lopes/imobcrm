@@ -12,6 +12,7 @@ public class UnityOfWork : IUnityOfWork
     private IContaExtraRepository _contaExtraRepository;
     private IContaFixaRepository _contaFixaRepository;
     private IPagamentoAluguelRepository _pagamentoAluguelRepository;
+    private IControleAluguelRepository _controleAluguelRepository;
 
     public AppDbContext _context;
 
@@ -81,6 +82,14 @@ public class UnityOfWork : IUnityOfWork
         get
         {
             return _pagamentoAluguelRepository ??= new PagamentoAluguelRepository(_context, this);
+        }
+    }
+    
+    public IControleAluguelRepository ControleAluguelRepository
+    {
+        get
+        {
+            return _controleAluguelRepository ??= new ControleAluguelRepository(_context, this);
         }
     }
 

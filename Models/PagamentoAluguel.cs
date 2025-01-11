@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace imobcrm.Models;
 public class PagamentoAluguel
@@ -25,5 +26,6 @@ public class PagamentoAluguel
     public DateTime? UltimaEdicao { get; set; }
 
     // Propriedade de Navegação
+    [JsonIgnore]
     public ContratoAluguel Contrato { get; set; }
 }

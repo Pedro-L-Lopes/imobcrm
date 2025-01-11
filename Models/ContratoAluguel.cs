@@ -50,4 +50,5 @@ public class ContratoAluguel
     public Cliente Locatario { get; set; }
     public Cliente Locador { get; set; }
     public Imovel Imovel { get; set; }
+    public PagamentoAluguel PagamentoAluguel { get; set; }
 }

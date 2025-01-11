@@ -66,4 +66,7 @@ public class ContratoAluguelDTO
     public Cliente? Locador { get; set; }
     [JsonIgnore]
     public Imovel? Imovel { get; set; }
+
+    [JsonIgnore]
+    public PagamentoAluguel? PagamentoAluguel { get; set; }
 }

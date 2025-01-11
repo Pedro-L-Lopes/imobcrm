@@ -21,49 +21,99 @@ public class PagamentoAluguelRepository : IPagamentoAluguelRepository
 
     public async Task<List<PagamentoAluguel>> GetPaymentsByContractId(Guid contractId)
     {
-        return await _context.PagamentoAlugueis
+        var payments = await _context.PagamentoAlugueis
             .Where(p => p.ContratoId == contractId)
             .OrderBy(p => p.PeriodoInicio)
             .ToListAsync();
+
+        DateTime today = DateTime.Now;
+        bool modifications = false;
+
+        foreach (var payment in payments)
+        {
+            if (payment.DataVencimentoAluguel < today && payment.StatusPagamento == "Pendente")
+            {
+                payment.StatusPagamento = "Em atraso";
+                modifications = true;
+            }
+        }
+
+        if (modifications)
+        {
+            await _context.SaveChangesAsync();
+        }
+
+        return payments;
     }
+
 
     public async Task<List<PagamentoAluguel>> GeneratePayments(ContratoAluguelDTO contract, int extraMonths)
     {
-        var pagamentos = new List<PagamentoAluguel>();
+        var payments = new List<PagamentoAluguel>();
 
-        DateTime inicio = contract.PrimeiroAluguel ?? contract.InicioContrato;
-        DateTime fim = contract.FimContrato ?? inicio.AddMonths(contract.TempoContrato + extraMonths);
-        DateTime periodoInicio = inicio;
-        DateTime periodoFim = inicio.AddMonths(1).AddDays(-1);
+        // Início do contrato
+        DateTime contractStart = contract.InicioContrato;
+        DateTime contractEnd = contract.FimContrato ?? contractStart.AddMonths(contract.TempoContrato + extraMonths);
 
-        // Busca o maior 'Codigo' existente e inicia o contador para o próximo
+        // Data do primeiro aluguel (caso definida), caso contrário, início do contrato
+        DateTime firstPaymentDate = contract.PrimeiroAluguel ?? contractStart;
+
+        // Define o primeiro período
+        DateTime periodStart = contractStart;
+        DateTime periodEnd = periodStart.AddMonths(1).AddDays(-1);
+
+        // Código incremental
         var lastCode = await _context.PagamentoAlugueis
             .MaxAsync(c => (int?)c.Codigo) ?? 0;
 
-        while (periodoInicio < fim)
-        {
-            lastCode++; // Incrementa o código para cada novo pagamento
+        bool firstPaymentDone = false;
+        DateTime today = DateTime.Now;
 
-            pagamentos.Add(new PagamentoAluguel
+        while (periodStart < contractEnd)
+        {
+            lastCode++;
+
+            // Ajusta o período fim para ser exatamente 1 mês a partir da data de início
+            periodEnd = periodStart.AddMonths(1).AddDays(-1);
+            if (periodEnd > contractEnd) periodEnd = contractEnd;
+
+            // Calcula o vencimento do aluguel
+            DateTime dueDate;
+            if (!firstPaymentDone && contract.PrimeiroAluguel != null)
+            {
+                // Primeiro pagamento na data definida
+                dueDate = firstPaymentDate;
+                firstPaymentDone = true;
+            }
+            else
+            {
+                // Pagamentos subsequentes no dia do vencimento especificado
+                int dueDay = Math.Min(contract.VencimentoAluguel, DateTime.DaysInMonth(periodStart.Year, periodStart.Month));
+                dueDate = new DateTime(periodStart.Year, periodStart.Month, dueDay);
+            }
+
+            // Define o status do pagamento com base na data de vencimento
+            string paymentStatus = dueDate < today ? "Em atraso" : "Pendente";
+
+            payments.Add(new PagamentoAluguel
             {
                 PagamentoAluguelId = Guid.NewGuid(),
                 ContratoId = contract.ContratoId,
                 Codigo = lastCode,
-                PeriodoInicio = periodoInicio,
-                PeriodoFim = periodoFim,
-                ReferenciaPagamento = $"{periodoInicio:MMM/yyyy}",
-                DataVencimentoAluguel = new DateTime(periodoFim.Year, periodoFim.Month, contract.VencimentoAluguel),
-                StatusPagamento = "Pendente"
+                PeriodoInicio = periodStart,
+                PeriodoFim = periodEnd,
+                ReferenciaPagamento = $"{periodStart:MMM/yyyy}",
+                DataVencimentoAluguel = dueDate,
+                StatusPagamento = paymentStatus
             });
 
-            periodoInicio = periodoFim.AddDays(1);
-            periodoFim = periodoInicio.AddMonths(1).AddDays(-1);
+            // Próximo período
+            periodStart = periodEnd.AddDays(1);
         }
 
-        await _context.PagamentoAlugueis.AddRangeAsync(pagamentos);
+        await _context.PagamentoAlugueis.AddRangeAsync(payments);
         await _uof.Commit();
 
-        return pagamentos;
+        return payments;
     }
-
 }
