@@ -1,4 +1,6 @@
-﻿using imobcrm.Errors;
+﻿using imobcrm.DTOs;
+using imobcrm.DTOs.PagamentoAluguelEditDTO;
+using imobcrm.Errors;
 using imobcrm.Models;
 using imobcrm.Repository.Interfaces;
 using imobcrm.Services.Interfaces;
@@ -30,4 +32,10 @@ public class PagamentoAluguelService : IPagamentoAluguelService
     {
         return await _uof.PagamentoAluguelRepository.GetPaymentsByContractId(contractId);
     }
+
+    public async Task<PagamentoAluguelDTO> UpdatePayment(PagamentoAluguelEditDTO pagamentoAluguelEditDTO)
+    {
+        return await _uof.PagamentoAluguelRepository.UpdatePayment(pagamentoAluguelEditDTO);
+    }
+
 }

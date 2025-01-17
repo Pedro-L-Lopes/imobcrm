@@ -22,64 +22,54 @@ public class ControleAluguelRepository : IControleAluguelRepository
         var today = DateTime.Today;
 
         // Obter contas fixas fora do loop principal
-        var contasFixas = await _context.ContasFixas.AsNoTracking().ToListAsync();
+        var fixedAccounts = await _context.ContasFixas.AsNoTracking().ToListAsync();
 
-        // Obter o pagamento correspondente ao período atual para cada contrato
-        var pagamentosAgrupados = await _context.PagamentoAlugueis
-            .AsNoTracking()
-            .Where(p => p.PeriodoInicio <= today && p.PeriodoFim >= today)
-            .GroupBy(p => p.ContratoId)
-            .Select(g => g.FirstOrDefault())
-            .ToListAsync();
-
-        // Carregar dados relacionados de contratos e imóveis
-        var contratos = await _context.ContratosAluguel
+        // Obter contratos com pagamentos e incluir dados relacionados
+        var contracts = await _context.ContratosAluguel
             .Include(c => c.Imovel)
                 .ThenInclude(i => i.Localizacao)
             .Include(c => c.Locador)
             .Include(c => c.Locatario)
             .AsNoTracking()
-            .ToDictionaryAsync(c => c.ContratoId);
+            .ToListAsync();
+
+        // Obter pagamentos do período atual
+        var payments = await _context.PagamentoAlugueis
+            .AsNoTracking()
+            .Where(p => p.PeriodoInicio <= today && p.PeriodoFim >= today)
+            .ToListAsync();
 
         // Criar a lista de DTOs
-        var controleAluguelDTOs = pagamentosAgrupados
-            .Select(p =>
-            {
-                if (p == null || !contratos.TryGetValue(p.ContratoId, out var contrato))
-                    return null;
-
-                return MapToControleAluguelDTO(p, contrato, contasFixas);
-            })
-            .Where(dto => dto != null)
-            .ToList();
+        var rentControlDTOs = contracts.Select(contract =>
+        {
+            var payment = payments.FirstOrDefault(p => p.ContratoId == contract.ContratoId);
+            return MapToControleAluguelDTO(payment, contract, fixedAccounts);
+        }).ToList();
 
         // Ordenação
         if (!string.IsNullOrEmpty(parameters.OrderBy))
         {
-            controleAluguelDTOs = parameters.OrderBy.ToLower() switch
+            rentControlDTOs = parameters.OrderBy.ToLower() switch
             {
                 "vencimentoaluguel" => parameters.SortDirection?.ToLower() == "desc"
-                    ? controleAluguelDTOs.OrderByDescending(dto => dto.DiaVencimento).ToList()
-                    : controleAluguelDTOs.OrderBy(dto => dto.DiaVencimento).ToList(),
+                    ? rentControlDTOs.OrderByDescending(dto => dto.DiaVencimento).ToList()
+                    : rentControlDTOs.OrderBy(dto => dto.DiaVencimento).ToList(),
                 "valorcontrato" => parameters.SortDirection?.ToLower() == "desc"
-                    ? controleAluguelDTOs.OrderByDescending(dto => dto.ValorAluguel).ToList()
-                    : controleAluguelDTOs.OrderBy(dto => dto.ValorAluguel).ToList(),
-                _ => controleAluguelDTOs
+                    ? rentControlDTOs.OrderByDescending(dto => dto.ValorAluguel).ToList()
+                    : rentControlDTOs.OrderBy(dto => dto.ValorAluguel).ToList(),
+                _ => rentControlDTOs
             };
         }
 
         // Paginação
-        var totalCount = controleAluguelDTOs.Count;
-        var pagedItems = controleAluguelDTOs
+        var totalCount = rentControlDTOs.Count;
+        var pagedItems = rentControlDTOs
             .Skip((parameters.PageNumber - 1) * parameters.PageSize)
             .Take(parameters.PageSize)
             .ToList();
 
         return new PagedList<ControleAluguelDTO>(pagedItems, totalCount, parameters.PageNumber, parameters.PageSize);
     }
-
-
-
 
     // Método auxiliar para mapear o DTO
     private ControleAluguelDTO MapToControleAluguelDTO(PagamentoAluguel pagamento, ContratoAluguel contrato, List<ContaFixa> contasFixas)
@@ -95,16 +85,19 @@ public class ControleAluguelRepository : IControleAluguelRepository
         return new ControleAluguelDTO
         {
             ContratoAluguelId = contrato.ContratoId,
+            ImovelId = contrato.ImovelId,
             CodigoImovel = imovel.Codigo,
-            EnderecoImovel = $"{imovel.Rua}, {imovel.Numero} - {localizacao.Bairro}, {localizacao.Cidade}-{localizacao.Estado}",
+            EnderecoImovel = string.Format("{0}, {1} - {2}, {3}-{4}", imovel.Rua, imovel.Numero, localizacao.Bairro, localizacao.Cidade, localizacao.Estado),
             CodigoLocador = contrato.Locador.Codigo,
             NomeLocador = contrato.Locador.Nome,
             CodigoLocatario = contrato.Locatario.Codigo,
             NomeLocatario = contrato.Locatario.Nome,
-            Periodo = $"{pagamento.PeriodoInicio:dd/MM/yyyy} - {pagamento.PeriodoFim:dd/MM/yyyy}",
+            Periodo = pagamento != null
+                ? string.Format("{0:dd/MM/yyyy} - {1:dd/MM/yyyy}", pagamento.PeriodoInicio, pagamento.PeriodoFim)
+                : "Não há pagamentos no período",
             DiaVencimento = contrato.VencimentoAluguel,
             ValorAluguel = contrato.ValorContrato,
-            StatusPagamento = pagamento.StatusPagamento?.ToLower() ?? "pendente",
+            StatusPagamento = pagamento?.StatusPagamento ?? "pendente",
 
             // Dados de contas fixas
             CodigoLuz = luz?.Codigo,
@@ -123,14 +116,4 @@ public class ControleAluguelRepository : IControleAluguelRepository
             StatusCondominio = condominio?.Status,
         };
     }
-
-
-
-
-
-
-
-
-
-
 }

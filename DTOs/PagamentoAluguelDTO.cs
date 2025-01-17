@@ -1,6 +1,7 @@
 ﻿namespace imobcrm.DTOs;
 public class PagamentoAluguelDTO
 {
+    public Guid? PagamentoAluguelId { get; set; }
     public Guid ContratoId { get; set; } // Chave estrangeira para ContratoAluguel
     public int Codigo { get; set; }
 

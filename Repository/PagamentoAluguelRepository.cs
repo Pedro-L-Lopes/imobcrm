@@ -1,5 +1,6 @@
 ﻿using imobcrm.Context;
 using imobcrm.DTOs;
+using imobcrm.DTOs.PagamentoAluguelEditDTO;
 using imobcrm.Errors;
 using imobcrm.Models;
 using imobcrm.Repository.Interfaces;
@@ -45,7 +46,6 @@ public class PagamentoAluguelRepository : IPagamentoAluguelRepository
 
         return payments;
     }
-
 
     public async Task<List<PagamentoAluguel>> GeneratePayments(ContratoAluguelDTO contract, int extraMonths)
     {
@@ -116,4 +116,43 @@ public class PagamentoAluguelRepository : IPagamentoAluguelRepository
 
         return payments;
     }
+
+    public async Task<PagamentoAluguelDTO> UpdatePayment(PagamentoAluguelEditDTO pagamentoAluguelEditDTO)
+    {
+        if (pagamentoAluguelEditDTO == null || pagamentoAluguelEditDTO.PagamentoAluguelId == Guid.Empty)
+        {
+            throw new CustomException(HttpStatusCode.BadRequest, "Dados inválidos");
+        }
+
+        var existingPayment = await _context.PagamentoAlugueis.FindAsync(pagamentoAluguelEditDTO.PagamentoAluguelId);
+
+        if (existingPayment == null)
+        {
+            throw new CustomException(HttpStatusCode.BadRequest, "Período de pagamento não encontrado");
+        }
+
+        existingPayment.ValorPago = pagamentoAluguelEditDTO.ValorPago;
+        existingPayment.StatusPagamento = pagamentoAluguelEditDTO.StatusPagamento;
+        existingPayment.DataPagamento = pagamentoAluguelEditDTO.DataPagamento;
+        existingPayment.UltimaEdicao = DateTime.UtcNow;
+
+        await _uof.Commit();
+
+        return new PagamentoAluguelDTO
+        {
+            PagamentoAluguelId = existingPayment.PagamentoAluguelId,
+            Codigo = existingPayment.Codigo,
+            ContratoId = existingPayment.ContratoId,
+            ValorPago = existingPayment.ValorPago,
+            StatusPagamento = existingPayment.StatusPagamento,
+            DataPagamento = existingPayment.DataPagamento,
+            DataVencimentoAluguel = existingPayment.DataVencimentoAluguel,
+            PeriodoInicio = existingPayment.PeriodoInicio,
+            PeriodoFim = existingPayment.PeriodoFim,
+            ReferenciaPagamento = existingPayment.ReferenciaPagamento,
+            UltimaEdicao = existingPayment.UltimaEdicao
+        };
+    }
+
+
 }

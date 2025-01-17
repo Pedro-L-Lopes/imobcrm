@@ -1,6 +1,5 @@
-﻿using imobcrm.Models;
+﻿using imobcrm.DTOs.PagamentoAluguelEditDTO;
 using imobcrm.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace imobcrm.Controllers;
@@ -29,4 +28,22 @@ public class PagamentoAluguelController : ControllerBase
         var pagamentos = await _pagamentoService.GetPaymentsByContractId(contractId);
         return Ok(pagamentos);
     }
+
+    [HttpPatch("atualizar")]
+    public async Task<IActionResult> UpdatePayments([FromBody] PagamentoAluguelEditDTO pagamentoAluguelEditDTO)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var updatedPayment = await _pagamentoService.UpdatePayment(pagamentoAluguelEditDTO);
+
+        return Ok(new
+        {
+            message = "Pagamento atualizado com sucesso",
+            data = updatedPayment
+        });
+    }
+
 }

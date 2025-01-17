@@ -5,6 +5,8 @@ namespace imobcrm.DTOs;
 public class ControleAluguelDTO
 {
     public Guid ContratoAluguelId { get; set; }
+    public Guid ImovelId { get; set; }
+
     public int CodigoImovel { get; set; }
     public string EnderecoImovel { get; set; }
 
